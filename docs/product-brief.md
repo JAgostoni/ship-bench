@@ -40,6 +40,12 @@ The editing experience should support either a basic WYSIWYG editor or a Markdow
 - Reasonable performance for a small-to-medium article set.
 - Basic security assumptions only; do not require enterprise auth unless later specified.
 
+**Design-only** (guide, don't implement v1): Full accessibility, advanced perf.
+
+## Testing Scope (v2 Update)
+**MVP**: Unit tests for core paths (list/search/CRUD).
+**Not MVP**: E2E/integration/accessibility audits.
+
 ## Design guidance
 The interface should feel calm, readable, and information-dense without being cluttered. Prioritize strong hierarchy, search-first navigation, and low-friction movement between list and detail views. Avoid over-designed marketing visuals, excessive motion, and admin flows with too many steps.
 
@@ -50,7 +56,7 @@ Each run should produce the following artifacts so runs are easier to compare.
 2. Scope and feature prioritization.
 3. Technical architecture spec.
 4. UX or design direction spec.
-5. Implementation backlog or execution plan.
+5. Implementation backlog or execution plan. (right-sized for multiple developer runs)
 6. Working application.
 7. Tests and verification notes.
 8. Short decisions log describing the main tradeoffs.
