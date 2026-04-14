@@ -26,9 +26,9 @@ Does MVP work? Score 0-5 each flow.
 | Local Run | Iteration 1 chunks → working app | Doesn't start | Partial setup | One-command local |
 | States | Empty/error/validation handled | No states | Basic errors | All MVP states |
 | Responsiveness | Desktop/tablet works | Desktop only | Buggy mobile | Fluid responsive |
-| Unit Tests | Core path coverage | None | Minimal | List/search/edit tested |
+| Unit Tests | Coverage on core paths | 1 (0-20% coverage) | 3 (~50% coverage) | 5 (≥80% coverage) |
 
-**Total**: Sum 8 (max 40) → 50 pts.
+**Total**: Sum of 8 items (max 40). Multiply by 1.25 for a final score out of 50 pts.
 
 ## Section 2: Implementation Quality (50 pts)
 Code discipline/execution. Score 0-5.
@@ -42,12 +42,11 @@ Code discipline/execution. Score 0-5.
 | Iteration Logs | 1: No evidence<br>3: Basic commits<br>5: Chunk-complete + decisions |
 | Verification | 1: Untested<br>3: Manual OK<br>5: Tests pass + manual QA |
 
-**Total**: Sum 6 (max 30) → 50 pts.
+**Total**: Sum of 6 items (max 30). Multiply by 1.66 for a final score out of 50 pts.
 
 ## Pass/Fail Gates (ALL required)
 - [ ] **MVP flows work** (browse→search→edit E2E).
 - [ ] **Local runs** (docker-compose up or npm start).
-- [ ] **≥80% unit test coverage** on core paths.
 - [ ] **No critical bugs** (crashes, data loss).
 - [ ] **Follows Planner chunks** (no massive deviations).
 
@@ -70,7 +69,7 @@ FUNCTIONALITY: __/50
 QUALITY: __/50  
 TOTAL: __/100 PASS/FAIL
 
-GATES: [ ]Flows [ ]Local [ ]Tests [ ]Bugs [ ]Chunks
+GATES: [ ]Flows [ ]Local [ ]Bugs [ ]Chunks
 
 **Audit**: Chunks completed: __/ __ planned
 Bugs found: [list]

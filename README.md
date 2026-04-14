@@ -103,8 +103,8 @@ Each role has a corresponding measurement spec that defines exactly how to score
 ### Scoring Approach
 
 - **Objective checks first**: feature checklist, test pass/fail, lint pass/fail, build success, required artifacts present
-- **LLM-as-judge**: scores planning, decision quality, UX adherence, and technical currency using the explicit rubric
-- **Human calibration**: a human reviews a sample of runs and all high-impact conclusions before publication
+- **Dual Independent Evaluation**: To mitigate the unreliability of LLM-as-judge for subjective code quality and UX metrics, evaluations are performed independently by both an **LLM Judge** and a **Human Judge** using the same explicit rubrics.
+- **Score Resolution**: If the LLM and Human scores diverge significantly, a deeper human review determines the final score.
 - **Pass bar**: ≥75/100 per role, with all gates required to pass
 
 ---
@@ -113,11 +113,11 @@ Each role has a corresponding measurement spec that defines exactly how to score
 
 1. **Set up the repo**: Start from a blank or scaffolded repo — the starting point should be held constant across runs.
 2. **Place the product brief** in `docs/product-brief.md` as the shared context for all roles.
-3. **Run each role in sequence**, passing prior outputs as context:
+3. **Run each role in sequence (Fresh Session Per Run)**: To prevent context window degradation, you MUST clear the LLM context/start a new session for every single role and every single Developer iteration. Pass only the required prior outputs as files in the workspace:
    - Architect → produces `docs/architecture.md`
    - UX Designer → produces `docs/ux-spec.md`
    - Planner → produces `docs/backlog.md` + `docs/iterations/iteration-N.md`
-   - Developer → runs iterations sequentially, each leaving a working app
+   - Developer → runs iterations sequentially. **Crucial**: Start a completely new session for *each* iteration chunk. The developer reads the previous specs and codebase from the file system, not from chat history.
    - Reviewer → reads all prior docs and the final repo, produces `docs/qa-report.md`
 4. **Score each deliverable** using the corresponding measurement spec in `evals/`.
 5. **Record results**: runtime, token usage, scores per role, pass/fail per gate, and qualitative notes.

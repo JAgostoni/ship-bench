@@ -1,8 +1,7 @@
-
 # Agentic SDLC Benchmark: Evaluation Process & Index
 
 ## Overview
-**5-phase evaluation** with independent specs per role → granular failure diagnosis. Poor Architect spec → optional canonical re-run for Planner/Developer.
+**5-phase evaluation** with independent specs per role → granular failure diagnosis. Poor Architect, UX, or Planner specs → optional canonical re-run for subsequent phases.
 
 **Total Score**: Average of 5 phase scores (0-100 each). **Capability Verdict**: Can it complete full SDLC? (Y/N/Partial)
 
@@ -11,9 +10,9 @@
 1. ARCHITECT
    ↓ Pass (≥75)? → Proceed | Fail → Note + optional canonical
 2. UX/DESIGNER  
-   ↓ Pass → Proceed
+   ↓ Pass (≥75)? → Proceed | Fail → Note + optional canonical
 3. PLANNER
-   ↓ Pass → Multi-chunk Developer runs
+   ↓ Pass (≥75)? → Proceed | Fail → Note + optional canonical
 4. DEVELOPER
    ↓ Pass → Final QA
 5. REVIEWER
@@ -23,8 +22,7 @@
 ## Phase Independence Rules
 | Phase Fail | Action | Rationale |
 |------------|--------|-----------|
-| Architect <75 | **Canonical re-run**: Use reference spec for Planner+ | Isolates coding/planning from design flaws |
-| UX/Planner <75 | Proceed (flawed handoff tests adaptation) | Real-world: bad specs common |
+| Architect, UX, or Planner <75 | **Canonical re-run**: Use reference spec for next phase | Isolates downstream phases from flawed upstream specs |
 | Developer <75 | **Fail run** (MVP must work) | Core deliverable |
 | Reviewer | Final judgment | |
 
@@ -50,9 +48,9 @@ EVIDENCE:
 ```
 
 ## Process Steps
-1. **Run phases sequentially** w/ handoffs.
+1. **Run phases sequentially (Fresh session per phase/iteration)** w/ file-based handoffs.
 2. **Score each** using spec worksheet.
-3. **Canonical intervention**: Architect fail → provide reference spec.
+3. **Canonical intervention**: If Architect, UX, or Planner fails → provide reference spec to next phase.
 4. **Aggregate** + capability verdict.
 5. **Archive** full evidence.
 
