@@ -77,6 +77,7 @@ Each prompt defines a role persona, its inputs, required outputs, decision const
 | **Planner** | [`prompts/planner.md`](prompts/planner.md) | Produces a right-sized Implementation Backlog split into 3–5 developer iterations, each deliverable end-to-end |
 | **Developer** | [`prompts/developer.md`](prompts/developer.md) | Implements one assigned iteration at a time, following all prior specs, leaving the codebase runnable after each pass |
 | **Reviewer** | [`prompts/reviewer.md`](prompts/reviewer.md) | Performs final QA + light code review, verifies all MVP flows, produces a defect log and a Ship / No-Ship recommendation |
+| **Evaluator** | [`prompts/evaluator.md`](prompts/evaluator.md) | Acts as an impartial LLM judge to score any of the 5 phases using the strict measurement specs, outputting a highly scientific, structured evaluation |
 
 ### Prompt Design Goals
 
@@ -119,7 +120,7 @@ Each role has a corresponding measurement spec that defines exactly how to score
    - Planner → produces `docs/backlog.md` + `docs/iterations/iteration-N.md`
    - Developer → runs iterations sequentially. **Crucial**: Start a completely new session for *each* iteration chunk. The developer reads the previous specs and codebase from the file system, not from chat history.
    - Reviewer → reads all prior docs and the final repo, produces `docs/qa-report.md`
-4. **Score each deliverable** using the corresponding measurement spec in `evals/`.
+4. **Score each deliverable**: Start a new session using the `prompts/evaluator.md` prompt to act as the LLM Judge. It will score the outputs using the corresponding measurement spec in `evals/` and save a highly structured, scientific evaluation file (e.g., `evals/architect-evaluation.md`).
 5. **Record results**: runtime, token usage, scores per role, pass/fail per gate, and qualitative notes.
 
 ### What to Record Per Run
