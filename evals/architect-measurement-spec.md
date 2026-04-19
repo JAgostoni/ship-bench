@@ -33,7 +33,7 @@ Judge choices against brief goals: v1 features, local ease, maintainability, ~10
 |-----------|---------|
 | Feature support | 1: Core flows impossible<br>3: Awkward workarounds<br>5: Clean support for browse/search/edit |
 | Simplicity | 1: Heavy/enterprise<br>3: Works but complex setup<br>5: Local-first, minimal deps |
-| Maintainability | 1: Obsolete/unmaintained<br>3: Current but verbose<br>5: Modern, ergonomic, documented |
+| Maintainability | 1: Obsolete/unmaintained<br>3: Current but verbose<br>5: Modern, ergonomic, documented<br>**⚠ Requires live search**: verify current release status of named libraries before scoring. |
 | Scale path | 1: Hits limits at 100 users<br>3: Works now, unclear future<br>5: Clear path to 1000+ users |
 | Ergonomics | 1: High-friction workflow<br>3: Standard but basic<br>5: Scripts/types streamline dev |
 | Evidence | 1: Narrative only<br>3: Some diagrams<br>5: Repo tree, schemas, examples |
@@ -41,7 +41,7 @@ Judge choices against brief goals: v1 features, local ease, maintainability, ~10
 **Total Quality**: Sum of 6 criteria (max 30). Scaled to 50 points.
 
 ## Pass/Fail Gates (Must pass ALL)
-- [ ] Names **exact frameworks/versions** (no "React-ish").
+- [ ] Names **exact frameworks/versions** (no "React-ish"). **⚠ Requires live search**: confirm each named version is the current stable release.
 - [ ] Defines **data model** for articles (fields/relations).
 - [ ] Specifies **search strategy** (not deferred).
 - [ ] Provides **repo layout** and local startup steps.

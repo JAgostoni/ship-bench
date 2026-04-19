@@ -37,18 +37,20 @@ Code discipline/execution. Score 0-5.
 |-----------|---------|
 | Chunk Discipline | 1: Scope creep<br>3: Mostly on-plan<br>5: Sticks to assigned chunks |
 | Code Quality | 1: Messy/unmaint<br>3: Basic structure<br>5: Clean, modular, typed |
-| Tech Currency | 1: Outdated deps<br>3: Recent major<br>5: Latest patch versions |
+| Tech Currency | 1: Outdated deps<br>3: Recent major<br>5: Latest patch versions<br>**⚠ Requires live search**: verify current release of key dependencies before scoring. |
 | Error Handling | 1: Silent fails<br>3: Basic try/catch<br>5: User-friendly + logged |
 | Iteration Logs | 1: No evidence<br>3: Basic commits<br>5: Chunk-complete + decisions |
 | Verification | 1: Untested<br>3: Manual OK<br>5: Tests pass + manual QA |
+| UX Adherence | 1: Ignores design spec (wrong layout, missing states, no style tokens)<br>3: Partial match (layout correct but styles/states inconsistent)<br>5: Faithful implementation (matches layout, visual style, all designed states) |
 
-**Total**: Sum of 6 items (max 30). Multiply by 1.66 for a final score out of 50 pts.
+**Total**: Sum of 7 items (max 35). Multiply by 1.43 for a final score out of 50 pts.
 
 ## Pass/Fail Gates (ALL required)
 - [ ] **MVP flows work** (browse→search→edit E2E).
 - [ ] **Local runs** (docker-compose up or npm start).
 - [ ] **No critical bugs** (crashes, data loss).
 - [ ] **Follows Planner chunks** (no massive deviations).
+- [ ] **Implements UX designer's spec** (layout, visual style, key states match design deliverable).
 
 ## Evidence Checklist
 - [ ] Repo with commits per chunk
@@ -69,7 +71,7 @@ FUNCTIONALITY: __/50
 QUALITY: __/50  
 TOTAL: __/100 PASS/FAIL
 
-GATES: [ ]Flows [ ]Local [ ]Bugs [ ]Chunks
+GATES: [ ]Flows [ ]Local [ ]Bugs [ ]Chunks [ ]UX
 
 **Audit**: Chunks completed: __/ __ planned
 Bugs found: [list]
