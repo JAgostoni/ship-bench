@@ -13,7 +13,7 @@ Perform the following:
   Confirm the app can be started locally using the instructions provided. Note any steps that fail, are missing, or require undocumented manual intervention.
 
 - Test suite review
-  Run the test suite and capture results. Check coverage against the testing scope defined in the brief. Note any untested critical paths.
+  Run the unit and integration test suites and capture results. Check coverage against the testing scope defined in the brief. Note any untested critical paths.
 
 - Responsiveness check
   Verify the app works at desktop and mobile breakpoints as required by the brief.

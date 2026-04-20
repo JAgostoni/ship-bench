@@ -43,8 +43,8 @@ The editing experience should support either a basic WYSIWYG editor or a Markdow
 **Design-only** (guide, don't implement v1): Full accessibility, advanced perf.
 
 ## Testing Scope (v2 Update)
-**MVP**: Unit tests for core paths (list/search/CRUD).
-**Not MVP**: E2E/integration/accessibility audits.
+**MVP**: Unit tests for core logic AND basic E2E/integration testing (e.g., Playwright) for critical user journeys (browse -> search -> edit).
+**Not MVP**: Full accessibility audits or exhaustive E2E edge-case coverage.
 
 ## Design guidance
 The interface should feel calm, readable, and information-dense without being cluttered. Prioritize strong hierarchy, search-first navigation, and low-friction movement between list and detail views. Avoid over-designed marketing visuals, excessive motion, and admin flows with too many steps.

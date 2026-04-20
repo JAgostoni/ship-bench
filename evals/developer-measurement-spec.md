@@ -1,4 +1,3 @@
-
 # Developer Measurement Spec
 
 ## Purpose
@@ -12,7 +11,7 @@ Evaluates **final MVP implementation** after 3-5 Planner-chunked iterations. Mea
 
 ## MVP Scope (From Brief v2)
 **Must work**: Browse list→detail, search (title+content w/states), basic edit.
-**Not required**: Tags/status, E2E tests, full accessibility.
+**Not required**: Tags/status, exhaustive E2E tests, full accessibility.
 
 ## Section 1: Functionality Completeness (50 pts)
 Does MVP work? Score 0-5 each flow.
@@ -26,7 +25,7 @@ Does MVP work? Score 0-5 each flow.
 | Local Run | Iteration 1 chunks → working app | Doesn't start | Partial setup | One-command local |
 | States | Empty/error/validation handled | No states | Basic errors | All MVP states |
 | Responsiveness | Desktop/tablet works | Desktop only | Buggy mobile | Fluid responsive |
-| Unit Tests | Coverage on core paths | 1 (0-20% coverage) | 3 (~50% coverage) | 5 (≥80% coverage) |
+| Automated Tests | Unit + E2E on core paths | 1 (0-20% coverage) | 3 (~50% coverage) | 5 (≥80% coverage + E2E critical flows) |
 
 **Total**: Sum of 8 items (max 40). Multiply by 1.25 for a final score out of 50 pts.
 
@@ -55,7 +54,7 @@ Code discipline/execution. Score 0-5.
 ## Evidence Checklist
 - [ ] Repo with commits per chunk
 - [ ] Working local app
-- [ ] Passing unit tests
+- [ ] Passing unit and integration tests
 - [ ] Screenshots of flows
 - [ ] Decisions log
 - [ ] Matches architecture/UX specs

@@ -12,7 +12,7 @@ Produce a Markdown Technical Architecture Spec that includes:
 - Feature-specific architecture decisions for any feature that has meaningful technical implications
 - Front-end / back-end integration
 - Repository structure and developer workflow
-- Testing strategy
+- Testing strategy (including unit tests and selecting an E2E framework like Playwright that matches the stack)
 - Local development and run instructions
 - Non-functional architecture decisions
 - Repo tree, schema or migration examples, and a short decisions log

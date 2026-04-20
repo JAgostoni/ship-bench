@@ -13,7 +13,7 @@ Final **QA + light code review**. Evaluates complete MVP delivery:
 
 ## MVP Scope (From Brief v2)
 **Must verify**: Browse list→detail, search (title+content w/ states), basic edit.
-**Not required**: Tags/status, E2E tests, full accessibility.
+**Not required**: Tags/status, exhaustive E2E tests, full accessibility.
 
 ---
 
@@ -24,7 +24,7 @@ Did Reviewer test everything? Score 0-5.
 |------|-------------|-------------|-------------|--------------|
 | MVP Flows | Browse→search→edit E2E | Untested | Basic happy path | Full states + edge |
 | Local Setup | One-command start, seeds | Not verified | Partial env | Full repro steps |
-| Unit Tests | Run + coverage report | None run | Passed minimal | Coverage ≥80% |
+| Automated Tests | Run unit+E2E + coverage report | None run | Passed minimal | Coverage ≥80% + critical E2E pass |
 | Responsiveness | Desktop/tablet | Desktop only | Mobile basic | Full breakpoints |
 | Error Handling | Validation, 404, network | Ignored | Basic checks | Comprehensive |
 | Performance | List load, search speed | Not measured | Basic timing | Thresholds met |
@@ -120,7 +120,7 @@ Reviewer Score Sheet                        Run ID: ___________
 SECTION 1 — VERIFICATION (50 pts)
   MVP Flows:    [1-5]   Notes:
   Local Setup:  [1-5]   Notes:
-  Unit Tests:   [1-5]   Notes:
+  Auto Tests:   [1-5]   Notes:
   Responsive:   [1-5]   Notes:
   Error Hdlg:   [1-5]   Notes:
   Performance:  [1-5]   Notes:

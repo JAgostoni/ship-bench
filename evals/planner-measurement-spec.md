@@ -1,10 +1,9 @@
-
 # Planner Measurement Spec (v3 - Right-Sizing)
 
 ## Purpose
 Measures Implementation Backlog/Execution Plan. **Core focus**: Right-sized chunks for 3-5 Developer iterations.
 
-**MVP Rule**: v1 features 1-3 only. Accessibility/E2E testing = design-only, not MVP implementation.
+**MVP Rule**: v1 features 1-3 only. Accessibility = design-only, not MVP implementation. Basic E2E testing for critical paths is required.
 
 ## Right-Sizing Rules (Objective)
 **Per-task assessment** (count steps, features, value):
@@ -31,7 +30,7 @@ Score 0-5 each area.
 | MVP Features | Browse/search/edit chunked | Missing | Partial | Complete |
 | Task Granularity | **5-15 steps, ≤1 feat, E2E** | Wrong sizes | Some good | **≥70% good** |
 | Tech Breakdown | Schema→API→UI chunks | Flat | Layered | Executable layers |
-| MVP Testing | Unit tests only | None | Basic | Critical paths |
+| MVP Testing | Unit + basic E2E | None | Basic unit | Unit + E2E critical paths |
 | Setup | Iteration 1 local-run | Missing | Basic | Scripts/seeds |
 | States | Empty/error validation | Ignored | Basic | MVP-tasked |
 | Iteration Plan | 3-5 run phases | Single-run | Multi-aware | Clear milestones |
@@ -58,7 +57,7 @@ Score 0-5.
 - [ ] **≥70% Good chunks** (5-15 steps, ≤1 feature, E2E value)
 - [ ] **MVP-only** (v1 features; stretch gated)
 - [ ] **3-5 iteration plan** (not single-run)
-- [ ] **Unit tests MVP-only**
+- [ ] **Unit and basic E2E tests for MVP**
 - [ ] **Iter1 local-first**
 
 ## Worksheet Template
@@ -75,5 +74,5 @@ COMPLETENESS: __/50
 QUALITY: __/50
 TOTAL: __/100 PASS/FAIL
 
-GATES: [ ]70% [ ]MVP [ ]Iters [ ]Units [ ]Local
+GATES: [ ]70% [ ]MVP [ ]Iters [ ]Tests [ ]Local
 ```
