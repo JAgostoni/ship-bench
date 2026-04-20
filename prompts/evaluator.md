@@ -19,7 +19,8 @@ Once a phase is selected, before evaluating, you must read:
 
 Instructions for Evaluation:
 - **Be Objective**: Base your scores entirely on the rubrics and anchors defined in the measurement spec. Do not penalize for things outside the spec.
-- **Show Your Work**: For each section in the rubric, provide a 1-2 sentence justification citing specific evidence from the agent's artifacts before giving the score.
+- **Verify Functionality**: When evaluating the Developer or Reviewer phases, do not just read the code or rely on the unit test output. You must follow the local run instructions to start the application and actively use a browser automation tool (like Playwright), curl, or scripts to perform exploratory testing and verify the MVP flows end-to-end.
+- **Show Your Work**: For each section in the rubric, provide a 1-2 sentence justification citing specific evidence from the agent's artifacts (or your exploratory testing results) before giving the score.
 - **Pass/Fail Gates**: Explicitly list each gate from the spec and state whether it PASSED or FAILED with a brief reason.
 - **Calculate Accurately**: If the measurement spec includes math conversions (e.g., "Multiply by 1.25"), you must explicitly perform and state the math in your output to reach the final section score.
 - **Final Verdict**: Provide the total score (out of 100) and the final PASS/FAIL verdict based on the threshold defined in the spec.
