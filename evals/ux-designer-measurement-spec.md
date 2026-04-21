@@ -15,7 +15,7 @@ Does it address all required design areas? Score each 0-5.
 
 | Area | Description | 1 (Missing) | 3 (Partial) | 5 (Complete) |
 |------|-------------|-------------|-------------|--------------|
-| Layout | Browse list, article detail, search results, edit form placement/flow | No page flows | Basic sketches | Full wireflows w/ transitions |
+| Layout | Browse list, article detail, search results, edit form placement/flow | No page flows | Basic descriptions | Full page descriptions w/ transitions (+bonus for visual wireflows) |
 | Search UX | Empty states, no-results, result ranking, facets if relevant | Search unaddressed | Basic search UI | Full states, error handling |
 | Edit flow | Editor choice (WYSIWYG/MD), preview, validation, save flow | No editing design | Basic form | Multi-step w/ validation states |
 | Responsiveness | Mobile/desktop breakpoints, touch targets, nav adaptation | Desktop only | Basic mobile | Full responsive spec |
@@ -36,7 +36,7 @@ Quality against brief goals: calm/readable/info-dense, search-first, low-frictio
 | Friction Reduction | 1: Multi-step cruft<br>3: Standard flows<br>5: List→detail→edit seamless, smart defaults |
 | Responsive Quality | 1: Mobile broken<br>3: Usable mobile<br>5: Native-feel mobile + desktop |
 | Accessibility | 1: Fails basic contrast<br>3: WCAG AA pass<br>5: Full a11y (focus, ARIA, semantics) |
-| Production Polish | 1: Prototype feel<br>3: Clean mockups<br>5: Micro-details (radius, shadows, motion) |
+| Production Polish | 1: Prototype feel<br>3: Clean descriptions<br>5: Micro-details (radius, shadows, motion) +bonus for mockups |
 | Handoff Clarity | 1: Ambiguous for dev<br>3: Clear enough<br>5: Dev-ready tokens/specs |
 
 **Total Quality**: Sum of 7 criteria (max 35). Scaled to 50 points.
