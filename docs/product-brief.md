@@ -29,7 +29,7 @@ The editing experience should support either a basic WYSIWYG editor or a Markdow
 - Support roughly 100 concurrent users for core read and edit flows.
 - Favor architecture and technology choices that would make future scaling straightforward.
 - Be easy to run in a local full-stack developer environment.
-- Use current libraries, frameworks, and service versions where practical.
+- Use the latest stable libraries, frameworks, and service versions where practical. You MUST perform a live web search to verify the current versions rather than relying on internal knowledge.
 - Prefer maintainable conventions and low-friction developer ergonomics over unnecessary complexity.
 
 ## Non-functional expectations

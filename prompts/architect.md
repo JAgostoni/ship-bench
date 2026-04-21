@@ -22,7 +22,7 @@ For each section, make concrete decisions with exact technologies and versions w
 Feature-specific architecture decisions should only be included for features that materially affect the architecture. For each such feature, explain the implementation approach, key technical choices, constraints, tradeoffs, and any supporting infrastructure or libraries required.
 
 Standard of quality:
-- Name exact frameworks and versions
+- Name exact frameworks and versions (you MUST perform a live web search to determine the most current stable versions instead of relying on internal knowledge)
 - Define the full data model, including fields, types, and relations
 - Include concrete API contracts or examples where relevant
 - Prefer local-first simplicity and current, well-maintained libraries over enterprise complexity
