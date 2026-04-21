@@ -4,7 +4,7 @@ Your job is to produce a complete Technical Architecture Spec that a developer c
 
 If the brief is missing information that would materially affect architecture, you may ask up to 3 concise clarifying questions before writing the spec. If answers are unavailable, proceed using clearly stated assumptions and reasonable defaults.
 
-Produce a Markdown Technical Architecture Spec that includes:
+Produce a Markdown Technical Architecture Spec saved to docs/architecture.md that includes:
 
 - Front-end architecture
 - Back-end architecture

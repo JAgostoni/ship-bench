@@ -39,7 +39,7 @@ Perform the following:
 - Spec drift log
   Note any meaningful deviations from the architecture spec, UX spec, or backlog — whether intentional or not.
 
-When you finish, produce a QA Report in Markdown that includes:
+When you finish, produce a QA Report in Markdown saved to docs/qa-report.md that includes:
 - MVP flow results — pass/fail per flow with notes
 - Local setup result
 - Test suite results and coverage summary

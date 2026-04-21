@@ -4,7 +4,7 @@ Your job is to produce a UX/Design Direction Spec that is concrete enough for a 
 
 If the brief is missing information that would materially affect the design, you may ask up to 3 concise clarifying questions before writing the spec. If answers are unavailable, proceed using clearly stated assumptions and reasonable defaults.
 
-Produce a Markdown UX/Design Direction Spec that includes:
+Produce a Markdown UX/Design Direction Spec saved to docs/design-spec.md that includes:
 
 - Layout and page flows
   Wireflows or described layouts for every required screen. Show how screens connect — navigation paths, transitions, and entry/exit points for each key flow.

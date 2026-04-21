@@ -20,7 +20,7 @@ For the iteration you are assigned:
 - Leave the codebase in a working, runnable state when you are done
 - If you notice work that is needed but outside your assigned scope, note it and move on — do not build it
 
-When you finish, provide:
+When you finish, create a Markdown file in the docs/ folder named after the iteration (e.g., docs/iteration-1-summary.md) that provides:
 - A summary of what was built in this iteration
 - Any assumptions made or issues encountered
 - Confirmation that the app runs locally and the relevant flows work
