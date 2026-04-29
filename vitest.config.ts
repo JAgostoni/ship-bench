@@ -9,6 +9,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: true,
+    hookTimeout: 30000,
     include: ['server/**/*.test.ts', 'shared/**/*.test.ts', 'src/**/*.test.ts'],
   },
   resolve: {

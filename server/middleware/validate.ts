@@ -1,22 +1,29 @@
 import type { Request, Response, NextFunction } from 'express';
 import { z, ZodError } from 'zod';
 
+export class ValidationError extends Error {
+  public code = 'VALIDATION_ERROR';
+  public details: { field: string; message: string }[];
+
+  constructor(issues: { field: string; message: string }[]) {
+    super('Request validation failed');
+    this.details = issues;
+  }
+}
+
 export function validateBody<T>(schema: z.ZodSchema<T>) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     try {
       const parsed = schema.parse(req.body);
       (req as Request & { validatedBody: T }).validatedBody = parsed;
       next();
     } catch (err) {
       if (err instanceof ZodError) {
-        res.status(400).json({
-          data: null,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Request validation failed',
-            details: err.errors,
-          },
-        });
+        const issues = (err.issues || []).map((e) => ({
+          field: e.path.join('.'),
+          message: e.message,
+        }));
+        next(new ValidationError(issues));
         return;
       }
       next(err);
