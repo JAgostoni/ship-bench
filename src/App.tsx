@@ -2,7 +2,7 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 import AppShell from './components/AppShell';
 import Home from './routes/Home';
 import ArticleDetail from './routes/ArticleDetail';
-import PlaceholderEditor from './routes/PlaceholderEditor';
+import ArticleEdit from './routes/ArticleEdit';
 
 function RootLayout() {
   return (
@@ -18,9 +18,9 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'articles/new', element: <PlaceholderEditor mode="new" /> },
+      { path: 'articles/new', element: <ArticleEdit /> },
       { path: 'articles/:slug', element: <ArticleDetail /> },
-      { path: 'articles/:slug/edit', element: <PlaceholderEditor mode="edit" /> },
+      { path: 'articles/:slug/edit', element: <ArticleEdit /> },
     ],
   },
 ]);
