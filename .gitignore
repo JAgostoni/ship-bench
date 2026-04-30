@@ -39,3 +39,7 @@ Thumbs.db
 coverage
 playwright-report
 test-results
+
+# Database
+*.db
+*.db-journal

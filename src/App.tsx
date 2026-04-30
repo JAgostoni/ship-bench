@@ -1,7 +1,26 @@
-export default function App() {
+import { createBrowserRouter, Outlet } from 'react-router-dom';
+import AppShell from './components/AppShell';
+import Home from './routes/Home';
+import ArticleDetail from './routes/ArticleDetail';
+import PlaceholderEditor from './routes/PlaceholderEditor';
+
+function RootLayout() {
   return (
-    <div className="min-h-screen bg-surface text-text-primary flex items-center justify-center">
-      <h1 className="text-2xl font-bold">Knowledge Base</h1>
-    </div>
+    <AppShell>
+      <Outlet />
+    </AppShell>
   );
 }
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: 'articles/new', element: <PlaceholderEditor mode="new" /> },
+      { path: 'articles/:slug', element: <ArticleDetail /> },
+      { path: 'articles/:slug/edit', element: <PlaceholderEditor mode="edit" /> },
+    ],
+  },
+]);
