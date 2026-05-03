@@ -5,7 +5,9 @@
       "Bash(npm run *)",
       "Bash(curl -s http://localhost:3001/api/articles)",
       "Bash(curl -s \"http://localhost:3001/api/search?q=onboarding\")",
-      "Bash(node eval-browser-check.mjs)"
+      "Bash(node eval-browser-check.mjs)",
+      "Bash(npx tsc *)",
+      "Bash(npx playwright *)"
     ]
   }
 }
