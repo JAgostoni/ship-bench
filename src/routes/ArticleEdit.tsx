@@ -416,6 +416,7 @@ export default function ArticleEdit() {
         <div className="flex items-center gap-2">
           <button
             type="button"
+            data-testid="editor-save"
             onClick={handleSave}
             disabled={!formValid || !dirty || saving}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-accent text-white text-sm font-medium hover:bg-accent-hover disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"

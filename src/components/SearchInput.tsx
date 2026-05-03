@@ -36,6 +36,12 @@ export default function SearchInput() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
   const handleChange = (value: string) => {
     setQuery(value);
     setLoading(true);

@@ -24,6 +24,12 @@ app.get('/api/health', (_req, res) => {
   res.json({ data: { status: 'ok' }, error: null });
 });
 
+// Serve React SPA in production
+app.use(express.static('dist'));
+app.use((_req, res) => {
+  res.sendFile('dist/index.html', { root: process.cwd() });
+});
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {

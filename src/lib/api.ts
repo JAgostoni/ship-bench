@@ -24,11 +24,19 @@ async function api<T>(path: string, options?: RequestInit): Promise<T> {
     },
   });
 
-  const json = (await res.json()) as ApiResponse<T>;
-
-  if (!res.ok || json.error) {
+  if (!res.ok) {
+    const json = (await res.json()) as ApiResponse<T>;
     const err = json.error ?? { code: 'UNKNOWN', message: 'An unexpected error occurred' };
     throw new ApiError(err.code, err.message, err.details);
+  }
+
+  if (res.status === 204) {
+    return undefined as unknown as T;
+  }
+
+  const json = (await res.json()) as ApiResponse<T>;
+  if (json.error) {
+    throw new ApiError(json.error.code, json.error.message, json.error.details);
   }
 
   return json.data as T;

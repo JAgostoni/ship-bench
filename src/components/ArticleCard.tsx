@@ -11,7 +11,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
   return (
     <Link
       to={`/articles/${article.slug}`}
-      className="block rounded-lg border border-slate-200 bg-white p-5 shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-colors focus-visible:ring-2 focus-visible:ring-accent"
+      data-testid="article-card" className="block rounded-lg border border-slate-200 bg-white p-5 shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-colors focus-visible:ring-2 focus-visible:ring-accent"
     >
       <h3 className="text-lg font-medium text-slate-900 group-hover:underline decoration-accent underline-offset-2">
         {article.title}

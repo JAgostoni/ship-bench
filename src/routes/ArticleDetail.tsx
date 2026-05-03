@@ -49,8 +49,7 @@ export default function ArticleDetail() {
     try {
       await deleteArticle(slug);
       setDeleteOpen(false);
-      setToast({ variant: 'success', message: 'Article deleted.' });
-      setTimeout(() => navigate('/'), 800);
+      navigate('/');
     } catch (e) {
       setDeleteOpen(false);
       setToast({
@@ -139,7 +138,8 @@ export default function ArticleDetail() {
               <button
                 type="button"
                 onClick={() => setDeleteOpen(true)}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-danger hover:bg-danger-bg focus-visible:ring-2 focus-visible:ring-danger"
+                data-testid="detail-delete"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-danger hover:bg-danger-bg focus-visible:ring-2 focus-visible:ring-danger"
               >
                 <Trash2 className="w-4 h-4" />
                 Delete
@@ -147,7 +147,7 @@ export default function ArticleDetail() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 mb-8">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 mb-8" data-testid="article-meta">
             <span>{formatDate(article.updatedAt)}</span>
             {article.category && (
               <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
@@ -165,6 +165,18 @@ export default function ArticleDetail() {
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
+                h1({ children, ...props }) {
+                  return <h2 {...props}>{children}</h2>;
+                },
+                h2({ children, ...props }) {
+                  return <h3 {...props}>{children}</h3>;
+                },
+                h3({ children, ...props }) {
+                  return <h4 {...props}>{children}</h4>;
+                },
+                h4({ children, ...props }) {
+                  return <h5 {...props}>{children}</h5>;
+                },
                 code({ children, className, ...props }) {
                   const isInline = !className;
                   return isInline ? (

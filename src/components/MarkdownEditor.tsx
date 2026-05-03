@@ -70,7 +70,19 @@ export default function MarkdownEditor({ value, onChange, placeholder }: Markdow
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  code({ children, className, ...props }) {
+                  h1({ children, ...props }) {
+                  return <h2 {...props}>{children}</h2>;
+                },
+                h2({ children, ...props }) {
+                  return <h3 {...props}>{children}</h3>;
+                },
+                h3({ children, ...props }) {
+                  return <h4 {...props}>{children}</h4>;
+                },
+                h4({ children, ...props }) {
+                  return <h5 {...props}>{children}</h5>;
+                },
+                code({ children, className, ...props }) {
                     const isInline = !className;
                     return isInline ? (
                       <code className="bg-slate-100 rounded-sm px-1 font-mono text-sm" {...props}>
