@@ -1,7 +1,6 @@
-import type { Config } from "next";
-
-const config: Config = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
 };
 
-export default config;
+export default nextConfig;
