@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
+import { SearchInput } from '@/components/search/SearchInput';
 
 interface AppHeaderProps {
   onMenuToggle?: () => void;
@@ -34,12 +35,8 @@ export function AppHeader({ onMenuToggle }: AppHeaderProps) {
         </Link>
       </div>
 
-      {/* Center: Search placeholder (non-functional for now) */}
-      <div className="hidden flex-1 justify-center md:flex">
-        <div className="w-full max-w-md rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text-muted)] h-10">
-          Search articles…
-        </div>
-      </div>
+      {/* Center: Search input */}
+      <SearchInput />
 
       {/* Right: New button */}
       <Button variant="primary" size="sm">
