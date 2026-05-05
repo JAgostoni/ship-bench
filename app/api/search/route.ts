@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     const validation = searchQuerySchema.safeParse({ q, limit });
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Invalid query', details: validation.error.errors },
+        { error: 'Invalid query', details: validation.error.issues },
         { status: 400 },
       );
     }

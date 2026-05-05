@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
 import { SearchInput } from '@/components/search/SearchInput';
 
 interface AppHeaderProps {
@@ -39,9 +38,11 @@ export function AppHeader({ onMenuToggle }: AppHeaderProps) {
       <SearchInput />
 
       {/* Right: New button */}
-      <Button variant="primary" size="sm">
-        + New
-      </Button>
+      <Link href="/articles/new">
+        <span className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md bg-[var(--color-accent)] px-3 py-1.5 text-sm font-medium text-[var(--color-text-inverse)] transition-colors hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-subtle)]">
+          + New
+        </span>
+      </Link>
     </header>
   );
 }

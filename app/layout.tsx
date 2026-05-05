@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { ToastContainer } from '@/components/ui/ToastContainer';
 import '@/app/global.css';
 
 const inter = Inter({
@@ -38,6 +39,7 @@ export default function RootLayout({
         <main id="main-content" className="pt-14">
           {children}
         </main>
+        <ToastContainer />
       </body>
     </html>
   );
