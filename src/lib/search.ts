@@ -15,75 +15,66 @@ export interface SearchArticlesResult {
   query: string;
 }
 
-/**
- * Escape special characters for FTS5 MATCH queries
- * FTS5 special chars: " ' - ( ) * AND OR NEAR ^
- */
-function escapeFts5(query: string): string {
-  // Wrap the query in double quotes and escape internal quotes
-  return `"${query.replace(/"/g, '""')}"`;
-}
-
 export function searchArticles(
   query: string,
   opts?: { limit?: number },
 ): SearchArticlesResult {
   const limit = opts?.limit ?? 20;
-  const escapedQuery = escapeFts5(query);
-
   const dbPath = path.resolve(process.cwd(), 'data', 'knowledge-base.db');
   const sqlite = new Database(dbPath);
 
   try {
-    // Re-index: insert any articles not yet in FTS (seeds before migration was applied)
-    sqlite.exec(
-      `INSERT OR REPLACE INTO articles_fts (rowid, title, content)
-       SELECT rowid, title, content FROM articles
-       WHERE NOT EXISTS (SELECT 1 FROM articles_fts f WHERE f.rowid = articles.rowid)`,
-    );
-
     const rawResults = sqlite
       .prepare(
-        `SELECT 
+        `SELECT
           a.id,
           a.title,
           a.status,
           c.name as category_name,
-          snippet(articles_fts, 0, '<mark>', '</mark>', '…', 64) AS title_snippet,
-          snippet(articles_fts, 1, '<mark>', '</mark>', '…', 100) AS content_snippet,
-          rank
-        FROM articles_fts
-        JOIN articles a ON articles_fts.rowid = a.rowid
+          a.content
+        FROM articles a
         LEFT JOIN article_categories ac ON a.id = ac.article_id
         LEFT JOIN categories c ON ac.category_id = c.id
-        WHERE articles_fts MATCH ?
-        ORDER BY rank
+        WHERE a.title LIKE ? OR a.content LIKE ?
+        ORDER BY
+          CASE WHEN a.title LIKE ? THEN 0 ELSE 1 END,
+          a.updated_at DESC
         LIMIT ?`,
       )
-      .all(escapedQuery, limit) as Array<{
+      .all(`%${query}%`, `%${query}%`, `%${query}%`, limit) as Array<{
         id: string;
         title: string;
         status: string;
         category_name: string | null;
-        title_snippet: string;
-        content_snippet: string;
-        rank: number;
+        content: string;
       }>;
 
-    const results: SearchResult[] = rawResults.map((row) => ({
-      id: row.id as string,
-      title:
-        row.title_snippet && row.title_snippet.includes('<mark>')
-          ? row.title_snippet
-          : (row.title as string),
-      status: row.status as 'draft' | 'published',
-      categoryName: row.category_name as string | null,
-      contentSnippet: row.content_snippet as string,
-      rank: row.rank as number,
-    }));
+    const results: SearchResult[] = rawResults.map((row) => {
+      const contentSnippet = truncateText(row.content, 100);
+      const searchLower = query.toLowerCase();
+      const titleLower = row.title.toLowerCase();
+      const titleIdx = titleLower.indexOf(searchLower);
+      const highlightedTitle = titleIdx >= 0
+        ? row.title.slice(0, titleIdx) + '<mark>' + row.title.slice(titleIdx, titleIdx + query.length) + '</mark>' + row.title.slice(titleIdx + query.length)
+        : row.title;
+
+      return {
+        id: row.id,
+        title: highlightedTitle,
+        status: row.status as 'draft' | 'published',
+        categoryName: row.category_name,
+        contentSnippet,
+        rank: titleIdx >= 0 ? 0 : 1,
+      };
+    });
 
     return { results, query };
   } finally {
     sqlite.close();
   }
+}
+
+function truncateText(text: string, maxLen: number): string {
+  if (text.length <= maxLen) return text;
+  return text.slice(0, maxLen) + '…';
 }

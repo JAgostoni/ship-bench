@@ -1,6 +1,5 @@
 import { getArticles, getCategories, getCategoryCounts } from '@/src/lib/articles';
 import { Sidebar } from '@/components/layout/Sidebar';
-import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { BrowseContent } from './browse-content';
 
 export default async function HomePage() {

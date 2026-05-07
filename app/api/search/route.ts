@@ -29,7 +29,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(searchResult);
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Search API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

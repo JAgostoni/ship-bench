@@ -18,7 +18,7 @@ interface SearchResult {
 export function SearchPageContent({ query }: SearchPageContentProps) {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [_, setHasSearched] = useState(false);
 
   useEffect(() => {
     async function fetchResults() {

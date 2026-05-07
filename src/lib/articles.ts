@@ -1,4 +1,4 @@
-import { eq, lt, desc } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { db } from '@/src/db';
 import { articles, articleCategories, categories } from '@/src/db/schema';
 
