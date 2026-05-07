@@ -5,6 +5,8 @@ Measures Implementation Backlog/Execution Plan. **Core focus**: Right-sized chun
 
 **MVP Rule**: v1 features 1-3 only. Accessibility = design-only, not MVP implementation. Basic E2E testing for critical paths is required.
 
+**IMPORTANT**: Check for backlog and iteration spec files (ex. docs/iterations/*)
+
 ## Right-Sizing Rules (Objective)
 **Per-task assessment** (count steps, features, value):
 
