@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:3000/api/articles)",
+      "Bash(node evals/eval-explore.mjs)",
+      "Bash(npx playwright *)"
     ]
   }
 }
