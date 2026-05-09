@@ -3,7 +3,6 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
-import { clsx } from 'clsx';
 import { Input } from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import MarkdownEditor from '@/components/ui/markdown-editor';
