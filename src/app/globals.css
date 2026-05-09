@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  :root {
+    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sidebar-width: 260px;
+    --header-height: 64px;
+    --header-height-mobile: 56px;
+    --content-max-width: 960px;
+    --transition-fast: 150ms;
+    --transition-normal: 200ms;
+    --z-header: 30;
+    --z-sidebar-backdrop: 40;
+    --z-sidebar-drawer: 50;
+    --z-skip-link: 60;
+  }
+
+  * {
+    @apply focus:outline-none;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: #171717;
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
