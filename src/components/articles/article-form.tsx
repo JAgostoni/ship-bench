@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Loader2 } from 'lucide-react';
+import { clsx } from 'clsx';
 import { Input } from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import MarkdownEditor from '@/components/ui/markdown-editor';
@@ -163,6 +163,7 @@ export function ArticleForm({ mode, initialData, categories }: ArticleFormProps)
             required
             error={errors.title}
             disabled={isPending}
+            data-testid="article-title-input"
           />
           {titleCharsNearLimit && !errors.title && (
             <p id="title-counter" className="text-sm text-neutral-500 mt-1">
@@ -188,7 +189,8 @@ export function ArticleForm({ mode, initialData, categories }: ArticleFormProps)
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               disabled={isPending}
-              className={clsx(
+              data-testid="article-category-select"
+            className={clsx(
                 'h-10 px-3 text-sm rounded-md border bg-white text-neutral-900',
                 'focus:border-neutral-500 focus:ring-2 focus:ring-neutral-500/20',
                 'disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed',
@@ -231,6 +233,7 @@ export function ArticleForm({ mode, initialData, categories }: ArticleFormProps)
               variant="danger"
               onClick={handleDelete}
               disabled={isPending}
+              data-testid="article-delete-button"
             >
               Delete...
             </Button>
@@ -257,6 +260,7 @@ export function ArticleForm({ mode, initialData, categories }: ArticleFormProps)
                 variant="secondary"
                 loading={isPending}
                 onClick={() => handleSubmit('draft')}
+                data-testid="article-save-draft-button"
               >
                 Save as Draft
               </Button>
@@ -265,6 +269,7 @@ export function ArticleForm({ mode, initialData, categories }: ArticleFormProps)
                 variant="primary"
                 loading={isPending}
                 onClick={() => handleSubmit('published')}
+                data-testid="article-publish-button"
               >
                 Publish
               </Button>
@@ -273,7 +278,7 @@ export function ArticleForm({ mode, initialData, categories }: ArticleFormProps)
 
           {/* Edit mode: Save */}
           {mode === 'edit' && (
-            <Button type="submit" variant="primary" loading={isPending}>
+            <Button type="submit" variant="primary" loading={isPending} data-testid="article-save-button">
               Save
             </Button>
           )}

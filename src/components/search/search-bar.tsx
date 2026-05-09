@@ -123,6 +123,7 @@ export default function SearchBar({ variant = 'header' }: SearchBarProps) {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder="Search articles..."
+          data-testid="search-input"
           className={`w-full bg-neutral-100 text-neutral-900 placeholder-neutral-400 border border-transparent rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-colors outline-none ${isHeader ? 'pl-10 pr-10 h-9 text-sm' : 'pl-10 pr-10 h-12 text-base'}`}
           aria-label="Search articles"
           autoComplete="off"
@@ -133,6 +134,7 @@ export default function SearchBar({ variant = 'header' }: SearchBarProps) {
           <button
             type="button"
             onClick={handleClear}
+            data-testid="search-clear"
             className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-200 transition-colors"
             aria-label="Clear search"
           >

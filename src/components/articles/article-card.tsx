@@ -17,7 +17,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const { title, slug, excerpt, category, status, updatedAt } = article;
 
   return (
-    <article className="border-b border-neutral-200 py-4 px-1 hover:bg-neutral-50 transition-colors">
+    <article data-testid="article-card" className="border-b border-neutral-200 py-4 px-1 hover:bg-neutral-50 transition-colors">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1">
         {/* Left: title + excerpt */}
         <div className="flex-1 min-w-0">

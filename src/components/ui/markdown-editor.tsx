@@ -31,11 +31,13 @@ function markdownComponents() {
 
 export function MarkdownEditor({ value, onChange, error }: MarkdownEditorProps) {
   const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write');
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 767px)').matches;
+  });
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 767px)');
-    setIsMobile(mql.matches);
     const listener = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mql.addEventListener('change', listener);
     return () => mql.removeEventListener('change', listener);
@@ -104,6 +106,7 @@ export function MarkdownEditor({ value, onChange, error }: MarkdownEditorProps) 
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
+            data-testid="article-content-textarea"
             aria-label="Markdown editor"
             className={clsx(
               'font-mono text-sm leading-relaxed p-4 bg-neutral-50 resize-y w-full min-h-[300px] md:min-h-0 outline-none',
