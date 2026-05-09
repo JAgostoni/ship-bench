@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { Suspense } from 'react';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
 import { Footer } from './footer';
+import SearchBar from '@/components/search/search-bar';
 
 interface CategoryData {
   id: number;
@@ -30,7 +32,15 @@ export function AppShell({ children, categories }: AppShellProps) {
 
   return (
     <>
-      <Header onMenuToggle={() => setMenuOpen(!menuOpen)} isMenuOpen={menuOpen} />
+      <Header
+        onMenuToggle={() => setMenuOpen(!menuOpen)}
+        isMenuOpen={menuOpen}
+        searchSlot={
+          <Suspense fallback={<div className="h-9 bg-neutral-100 rounded-md animate-pulse w-full max-w-xs hidden md:block" />}>
+            <SearchBar />
+          </Suspense>
+        }
+      />
       <div className="flex flex-1">
         <Sidebar
           categories={categories}
