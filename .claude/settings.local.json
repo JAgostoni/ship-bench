@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "PowerShell(npm test *)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://127.0.0.1:3001/api/articles?limit=3\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell(Start-Sleep -Seconds 5; try { $r=Invoke-WebRequest -Uri http://127.0.0.1:3000 -UseBasicParsing -TimeoutSec 5; Write-Output \"WEB STATUS: $\\($r.StatusCode\\); size=$\\($r.RawContentLength\\)\" } catch { Write-Output \"WEB FAIL: $_\" })",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(npx playwright test 2>&1 | Select-Object -Last 80)"
     ]
   }
 }
