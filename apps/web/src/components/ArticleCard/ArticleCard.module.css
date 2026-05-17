@@ -87,3 +87,10 @@
 .card:hover .arrow {
   color: var(--color-accent);
 }
+
+.highlight {
+  background-color: rgba(37, 99, 235, 0.15);
+  color: inherit;
+  border-radius: 2px;
+  font-weight: 600;
+}

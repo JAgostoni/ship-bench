@@ -22,13 +22,15 @@ interface ArticlesResponse {
 export const Home: React.FC = () => {
   const [searchParams] = useSearchParams();
   const categorySlug = searchParams.get('category');
+  const searchQuery = searchParams.get('search');
 
   const { data, isLoading, error } = useQuery<ArticlesResponse>({
-    queryKey: ['articles', categorySlug],
+    queryKey: ['articles', categorySlug, searchQuery],
     queryFn: async () => {
       const response = await axios.get('http://localhost:3001/api/articles', {
         params: {
           category: categorySlug,
+          search: searchQuery,
         },
       });
       return response.data;
@@ -44,12 +46,16 @@ export const Home: React.FC = () => {
     );
   }
 
+  const getTitle = () => {
+    if (searchQuery) return `Search: "${searchQuery}"`;
+    if (categorySlug) return `Category: ${categorySlug}`;
+    return 'Latest Articles';
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>
-          {categorySlug ? `Category: ${categorySlug}` : 'Latest Articles'}
-        </h1>
+        <h1 className={styles.title}>{getTitle()}</h1>
         <p className={styles.subtitle}>
           {data?.total || 0} articles found
         </p>
@@ -64,11 +70,18 @@ export const Home: React.FC = () => {
           ))
         ) : data?.items.length === 0 ? (
           <div className={styles.empty}>
-            <p>No articles found in this category.</p>
+            {searchQuery ? (
+              <>
+                <p>No results found for "{searchQuery}".</p>
+                <p className={styles.emptyHint}>Try different keywords or check your spelling.</p>
+              </>
+            ) : (
+              <p>No articles found in this category.</p>
+            )}
           </div>
         ) : (
           data?.items.map((article) => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard key={article.id} article={article} searchQuery={searchQuery} />
           ))
         )}
       </div>

@@ -34,7 +34,7 @@ app.get('/api/categories', async (req, res) => {
 // Articles List
 app.get('/api/articles', async (req, res) => {
   try {
-    const { category, page = '1', limit = '10' } = req.query;
+    const { search, category, page = '1', limit = '10' } = req.query;
     const pageNum = parseInt(page as string, 10);
     const limitNum = parseInt(limit as string, 10);
     const skip = (pageNum - 1) * limitNum;
@@ -49,6 +49,14 @@ app.get('/api/articles', async (req, res) => {
       };
     }
 
+    if (search) {
+      const searchString = (search as string).trim().split(/\s+/).join(' | ');
+      where.OR = [
+        { title: { search: searchString } },
+        { content: { search: searchString } },
+      ];
+    }
+
     const [items, total] = await Promise.all([
       prisma.article.findMany({
         where,
@@ -60,7 +68,7 @@ app.get('/api/articles', async (req, res) => {
             },
           },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: search ? undefined : { createdAt: 'desc' },
         skip,
         take: limitNum,
       }),

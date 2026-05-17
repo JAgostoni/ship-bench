@@ -11,9 +11,35 @@ interface ArticleWithRelations extends Article {
 
 interface ArticleCardProps {
   article: ArticleWithRelations;
+  searchQuery?: string | null;
 }
 
-export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
+const Highlight: React.FC<{ text: string; query: string | null | undefined }> = ({ text, query }) => {
+  if (!query) return <>{text}</>;
+  
+  const words = query.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return <>{text}</>;
+  
+  // Create a regex that matches any of the search words
+  // Escape special regex characters in words
+  const escapedWords = words.map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const pattern = new RegExp(`(${escapedWords.join('|')})`, 'gi');
+  const parts = text.split(pattern);
+  
+  return (
+    <>
+      {parts.map((part, i) => 
+        pattern.test(part) ? (
+          <mark key={i} className={styles.highlight}>{part}</mark>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+};
+
+export const ArticleCard: React.FC<ArticleCardProps> = ({ article, searchQuery }) => {
   const formattedDate = new Date(article.createdAt).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -33,9 +59,15 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
           </span>
         </div>
         
-        <h2 className={styles.title}>{article.title}</h2>
+        <h2 className={styles.title}>
+          <Highlight text={article.title} query={searchQuery} />
+        </h2>
         
-        {article.excerpt && <p className={styles.excerpt}>{article.excerpt}</p>}
+        {article.excerpt && (
+          <p className={styles.excerpt}>
+            <Highlight text={article.excerpt} query={searchQuery} />
+          </p>
+        )}
         
         <div className={styles.tags}>
           {article.tags?.map(({ tag }) => (

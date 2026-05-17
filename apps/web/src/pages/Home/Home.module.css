@@ -35,6 +35,12 @@
   color: var(--color-text-secondary);
 }
 
+.emptyHint {
+  font-size: 0.875rem;
+  margin-top: var(--spacing-2);
+  opacity: 0.8;
+}
+
 .error {
   text-align: center;
   padding: var(--spacing-12);
