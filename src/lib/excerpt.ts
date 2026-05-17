@@ -3,7 +3,7 @@ export function extractExcerpt(markdown: string): string {
     .replace(/!\[.*?\]\(.*?\)/g, '')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`]+`/g, '')
+    .replace(/`([^`]+)`/g, '$1')
     .replace(/#{1,6}\s+/g, '')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/\*([^*]+)\*/g, '$1')

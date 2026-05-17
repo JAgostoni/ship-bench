@@ -79,7 +79,7 @@ export function ArticleEditor({ defaultValue = '', name, error }: ArticleEditorP
       <textarea
         name={name}
         value={value}
-        readOnly
+        onChange={(e) => setValue(e.target.value)}
         className="sr-only"
         aria-hidden="true"
       />
