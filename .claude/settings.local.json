@@ -6,7 +6,18 @@
       "PowerShell(Invoke-WebRequest -Uri \"http://127.0.0.1:3001/api/articles?limit=3\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
       "PowerShell(Start-Sleep -Seconds 5; try { $r=Invoke-WebRequest -Uri http://127.0.0.1:3000 -UseBasicParsing -TimeoutSec 5; Write-Output \"WEB STATUS: $\\($r.StatusCode\\); size=$\\($r.RawContentLength\\)\" } catch { Write-Output \"WEB FAIL: $_\" })",
       "PowerShell(Get-NetTCPConnection *)",
-      "PowerShell(npx playwright test 2>&1 | Select-Object -Last 80)"
+      "PowerShell(npx playwright test 2>&1 | Select-Object -Last 80)",
+      "Bash(npm test *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"Web: %{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"API: %{http_code}\\\\n\" http://localhost:3000/api/articles)",
+      "Bash(curl -s http://localhost:3001/api/articles)",
+      "Bash(curl -s -o /dev/null -w \"Web: %{http_code}\\\\n\" http://127.0.0.1:3000/)",
+      "Bash(curl -s http://127.0.0.1:3001/api/articles)",
+      "Bash(curl -s \"http://127.0.0.1:3001/api/articles?search=security\")",
+      "Bash(curl -s \"http://127.0.0.1:3001/api/articles\" -o /dev/null -w \"List status: %{http_code}\\\\n\")",
+      "Bash(npx playwright *)"
     ]
   }
 }
