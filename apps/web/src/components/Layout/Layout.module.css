@@ -193,14 +193,21 @@
     height: auto;
     position: relative;
     padding: var(--spacing-4);
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
   }
   
-  .section, .footer {
+  .section {
     display: none;
   }
   
   .nav {
     flex-direction: row;
-    margin-bottom: 0;
+    margin-bottom: var(--spacing-4);
+  }
+
+  .footer {
+    margin-top: var(--spacing-4);
+    padding-top: 0;
   }
 }

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "./index.ts",
   "types": "./index.ts",
+  "scripts": {
+    "test": "vitest run"
+  },
   "dependencies": {
     "zod": "4.4.3"
   }

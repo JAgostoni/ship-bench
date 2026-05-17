@@ -49,3 +49,12 @@ h2 { font-size: 1.5rem; }
 .app-container {
   min-height: 100vh;
 }
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+button, a, input, select, textarea {
+  transition: all 150ms ease-in-out;
+}

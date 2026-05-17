@@ -2,23 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import { prisma } from '@kb/db';
 import { CreateArticleSchema, UpdateArticleSchema } from '@kb/types';
+import { slugify, formatSearchQuery } from './utils/text';
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-
-// Helper: Slugify
-const slugify = (text: string) => {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')     // Replace spaces with -
-    .replace(/[^\w-]+/g, '')  // Remove all non-word chars
-    .replace(/--+/g, '-');    // Replace multiple - with single -
-};
 
 // Helper: Ensure unique slug
 const ensureUniqueSlug = async (title: string, currentId?: string) => {
@@ -88,7 +78,7 @@ app.get('/api/articles', async (req, res) => {
     }
 
     if (search) {
-      const searchString = (search as string).trim().split(/\s+/).join(' | ');
+      const searchString = formatSearchQuery(search as string);
       where.OR = [
         { title: { search: searchString } },
         { content: { search: searchString } },
@@ -232,6 +222,10 @@ app.delete('/api/articles/:id', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`API server listening on port ${port}`);
-});
+export { app };
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(Number(port), '127.0.0.1', () => {
+    console.log(`API server listening on http://127.0.0.1:${port}`);
+  });
+}

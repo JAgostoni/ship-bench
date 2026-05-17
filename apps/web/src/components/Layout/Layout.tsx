@@ -60,13 +60,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={styles.container}>
-      <aside className={styles.sidebar}>
+      <aside className={styles.sidebar} role="complementary">
         <div className={styles.logo}>
-          <Link to="/">KB<span>.</span></Link>
+          <Link to="/" aria-label="Home">KB<span>.</span></Link>
         </div>
 
-        <div className={styles.searchContainer}>
-          <SearchIcon className={styles.searchIcon} size={16} />
+        <div className={styles.searchContainer} role="search">
+          <SearchIcon className={styles.searchIcon} size={16} aria-hidden="true" />
           <input
             ref={searchInputRef}
             type="text"
@@ -74,18 +74,19 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             placeholder="Search articles..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
+            aria-label="Search articles"
           />
-          <div className={styles.searchShortcut}>
+          <div className={styles.searchShortcut} aria-hidden="true">
             {window.navigator.platform.includes('Mac') ? '⌘K' : 'Ctrl+K'}
           </div>
         </div>
         
-        <nav className={styles.nav}>
+        <nav className={styles.nav} aria-label="Main Navigation">
           <NavLink 
             to="/" 
             className={({ isActive }) => isActive && !searchParams.has('category') && !searchParams.has('search') ? `${styles.navLink} ${styles.active}` : styles.navLink}
           >
-            <Home size={18} />
+            <Home size={18} aria-hidden="true" />
             <span>Home</span>
           </NavLink>
         </nav>
@@ -102,7 +103,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     to={`/?category=${category.slug}`}
                     className={({ isActive }) => isActive ? `${styles.categoryLink} ${styles.active}` : styles.categoryLink}
                   >
-                    <Folder size={16} />
+                    <Folder size={16} aria-hidden="true" />
                     <span>{category.name}</span>
                   </NavLink>
                 </li>
@@ -113,13 +114,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         <div className={styles.footer}>
           <Link to="/articles/new" className={styles.createButton}>
-            <PlusCircle size={18} />
+            <PlusCircle size={18} aria-hidden="true" />
             <span>New Article</span>
           </Link>
         </div>
       </aside>
       
-      <main className={styles.main}>
+      <main className={styles.main} id="main-content">
         {children}
       </main>
     </div>
