@@ -4,11 +4,23 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
 
-export function SearchBar() {
+interface SearchBarProps {
+  id?: string;
+  autoFocus?: boolean;
+}
+
+export function SearchBar({ id = 'search-input', autoFocus = false }: SearchBarProps = {}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [value, setValue] = useState(searchParams.get('q') ?? '');
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus) {
+      inputRef.current?.focus();
+    }
+  }, [autoFocus]);
 
   useEffect(() => {
     setValue(searchParams.get('q') ?? '');
@@ -49,7 +61,7 @@ export function SearchBar() {
 
   return (
     <div className="relative flex items-center">
-      <label htmlFor="search-input" className="sr-only">
+      <label htmlFor={id} className="sr-only">
         Search articles
       </label>
       <Search
@@ -59,7 +71,8 @@ export function SearchBar() {
         style={{ color: value ? 'var(--color-accent)' : 'var(--color-text-muted)' }}
       />
       <input
-        id="search-input"
+        ref={inputRef}
+        id={id}
         type="search"
         placeholder="Search articles…"
         value={value}
@@ -84,8 +97,8 @@ export function SearchBar() {
         <button
           onClick={handleClear}
           aria-label="Clear search"
-          className="absolute right-2 p-1 flex items-center justify-center rounded transition-colors duration-100"
-          style={{ color: 'var(--color-text-muted)' }}
+          className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center rounded transition-colors duration-100"
+          style={{ color: 'var(--color-text-muted)', minWidth: '44px', minHeight: '44px' }}
         >
           <X size={16} aria-hidden="true" />
         </button>

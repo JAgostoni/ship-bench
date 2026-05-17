@@ -175,7 +175,7 @@ export function EditArticleForm({ article, categories }: EditArticleFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="px-4 py-2 text-sm font-medium rounded disabled:opacity-50"
+            className="h-11 md:h-10 px-4 text-sm font-medium rounded-md disabled:opacity-50 transition-colors duration-100"
             style={{
               backgroundColor: 'var(--color-accent)',
               color: '#fff',

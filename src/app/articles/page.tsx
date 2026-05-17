@@ -43,7 +43,7 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
         </div>
         <Link
           href="/articles/new"
-          className="h-10 px-4 inline-flex items-center rounded-md font-medium text-white text-sm transition-colors duration-100 shrink-0
+          className="h-11 md:h-10 px-4 inline-flex items-center rounded-md font-medium text-white text-sm transition-colors duration-100 shrink-0
                      hover:bg-[--color-accent-hover]
                      focus-visible:ring-2 focus-visible:ring-[--color-accent] focus-visible:ring-offset-2"
           style={{ backgroundColor: 'var(--color-accent)' }}

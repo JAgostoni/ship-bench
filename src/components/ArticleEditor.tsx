@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 
@@ -13,9 +13,49 @@ interface ArticleEditorProps {
 
 export function ArticleEditor({ defaultValue = '', name, error }: ArticleEditorProps) {
   const [value, setValue] = useState(defaultValue);
+  const [isMobile, setIsMobile] = useState(false);
+  const [editorMode, setEditorMode] = useState<'edit' | 'preview'>('edit');
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   return (
     <div>
+      {/* Mobile tab bar */}
+      {isMobile && (
+        <div className="flex border-b mb-2" style={{ borderColor: 'var(--color-border)' }}>
+          <button
+            type="button"
+            onClick={() => setEditorMode('edit')}
+            className="px-4 py-2 text-sm font-medium transition-colors duration-100"
+            style={{
+              color: editorMode === 'edit' ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+              borderBottom: editorMode === 'edit' ? '2px solid var(--color-accent)' : '2px solid transparent',
+              marginBottom: '-1px',
+            }}
+          >
+            Write
+          </button>
+          <button
+            type="button"
+            onClick={() => setEditorMode('preview')}
+            className="px-4 py-2 text-sm font-medium transition-colors duration-100"
+            style={{
+              color: editorMode === 'preview' ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+              borderBottom: editorMode === 'preview' ? '2px solid var(--color-accent)' : '2px solid transparent',
+              marginBottom: '-1px',
+            }}
+          >
+            Preview
+          </button>
+        </div>
+      )}
+
       <div
         style={error ? { border: '1px solid var(--color-error)', borderRadius: '6px' } : undefined}
       >
@@ -23,7 +63,7 @@ export function ArticleEditor({ defaultValue = '', name, error }: ArticleEditorP
           <div
             className="animate-pulse rounded"
             style={{
-              minHeight: '400px',
+              minHeight: isMobile ? '300px' : '400px',
               backgroundColor: 'var(--color-border)',
             }}
           />
@@ -31,7 +71,8 @@ export function ArticleEditor({ defaultValue = '', name, error }: ArticleEditorP
           <MDEditor
             value={value}
             onChange={(val) => setValue(val ?? '')}
-            minHeight={400}
+            minHeight={isMobile ? 300 : 400}
+            preview={isMobile ? editorMode : 'live'}
           />
         )}
       </div>

@@ -83,7 +83,7 @@ export default async function ArticleDetailPage({
         Updated {formattedDate} · {article.readingTimeMinutes} min read
       </p>
 
-      <div className="mt-4 max-w-[720px] mx-auto">
+      <div className="mt-4 md:max-w-[720px] md:mx-auto">
         <ArticleRenderer content={article.content} />
       </div>
     </div>

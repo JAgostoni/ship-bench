@@ -19,7 +19,7 @@ export function ArticleCard({ title, slug, excerpt, category, status, updatedAt 
     <li>
       <Link
         href={`/articles/${slug}`}
-        className="block bg-white border rounded p-4 transition-colors duration-100
+        className="block bg-white border rounded p-3 md:p-4 transition-colors duration-100
                    hover:border-[--color-accent] hover:bg-[--color-accent-subtle]
                    focus-visible:ring-2 focus-visible:ring-[--color-accent] focus-visible:ring-offset-2 outline-none"
         style={{ borderColor: 'var(--color-border)' }}

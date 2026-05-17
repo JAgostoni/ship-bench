@@ -1,4 +1,4 @@
-const CATEGORY_COLORS = [
+export const CATEGORY_COLORS = [
   { bg: '#eff6ff', text: '#1d4ed8', border: '#bfdbfe' },
   { bg: '#f0fdf4', text: '#15803d', border: '#bbf7d0' },
   { bg: '#fdf4ff', text: '#7e22ce', border: '#e9d5ff' },

@@ -24,7 +24,8 @@
       "Bash(curl -s \"http://localhost:3000/api/articles/nonexistent-id\")",
       "Bash(curl -s -X POST \"http://localhost:3000/api/articles\" -H \"Content-Type: application/json\" -d '{\"title\":\"Test Article\",\"content\":\"Hello world this is a test\",\"status\":\"PUBLISHED\"}')",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('Total:', d['total']\\)\")",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(npx next *)"
     ]
   }
 }
