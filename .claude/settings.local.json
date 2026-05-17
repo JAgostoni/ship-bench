@@ -1,7 +1,21 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm --version)",
+      "Bash(npx create-next-app@16.2.6 . --typescript --eslint --no-tailwind --app --turbopack --src-dir --no-import-alias --yes)",
+      "Bash(npm install *)",
+      "Bash(npm show *)",
+      "Bash(python -c \"import sys,json; v=json.load\\(sys.stdin\\); print\\([x for x in v if '7.4' in x]\\)\")",
+      "Bash(python -c \"import sys,json; v=json.load\\(sys.stdin\\); print\\([x for x in v if '4.1' in x or '4.0' in x]\\)\")",
+      "Bash(npx playwright *)",
+      "Bash(npx prisma *)",
+      "Bash(docker compose *)",
+      "Bash(docker exec *)",
+      "Bash(npm run *)",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); console.log\\('DB URL:', process.env.DATABASE_URL\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(pkill -f \"next dev\")"
     ]
   }
 }
