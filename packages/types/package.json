@@ -1,0 +1,9 @@
+{
+  "name": "@kb/types",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "zod": "4.4.3"
+  }
+}

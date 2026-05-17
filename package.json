@@ -1,0 +1,22 @@
+{
+  "name": "knowledge-base-app",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "prisma:generate": "npm run prisma:generate --workspace=packages/db",
+    "prisma:migrate": "npm run prisma:migrate --workspace=packages/db",
+    "prisma:seed": "npm run prisma:seed --workspace=packages/db"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
