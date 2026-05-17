@@ -1,0 +1,116 @@
+.container {
+  padding-bottom: var(--spacing-12);
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: var(--spacing-2) 0;
+  margin-bottom: var(--spacing-8);
+  transition: color 150ms ease-in-out;
+}
+
+.backButton:hover {
+  color: var(--color-accent);
+}
+
+.header {
+  margin-bottom: var(--spacing-12);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-8);
+}
+
+.category {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-2);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-6);
+  color: var(--color-text-primary);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  margin-bottom: var(--spacing-6);
+  color: var(--color-text-secondary);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.9375rem;
+}
+
+.draftBadge {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-draft);
+  border: 1px solid var(--color-border);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+}
+
+.content {
+  max-width: 800px;
+}
+
+/* Skeletons */
+.backSkeleton { margin-bottom: var(--spacing-8); }
+.titleSkeleton { margin-bottom: var(--spacing-6); }
+.metaSkeleton { margin-bottom: var(--spacing-12); }
+.contentSkeleton { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.lineSkeleton { margin-bottom: var(--spacing-2); }
+.boxSkeleton { margin-bottom: var(--spacing-4); }
+
+.error {
+  text-align: center;
+  padding: var(--spacing-12);
+  color: var(--color-error);
+}
+
+.backLink {
+  display: inline-block;
+  margin-top: var(--spacing-4);
+  color: var(--color-accent);
+  text-decoration: none;
+}
