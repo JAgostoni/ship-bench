@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+.prose a { color: var(--color-accent); }
+.prose a:hover { color: var(--color-accent-hover); }
+
 @layer base {
   :root {
     --color-bg:               #f8f9fa;
