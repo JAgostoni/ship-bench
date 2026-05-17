@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from './components/Layout/Layout';
 import { Home } from './pages/Home/Home';
 import { ArticleDetail } from './pages/ArticleDetail/ArticleDetail';
+import { ArticleEdit } from './pages/ArticleEdit/ArticleEdit';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +22,9 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/articles/new" element={<ArticleEdit />} />
             <Route path="/articles/:slug" element={<ArticleDetail />} />
+            <Route path="/articles/:slug/edit" element={<ArticleEdit />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

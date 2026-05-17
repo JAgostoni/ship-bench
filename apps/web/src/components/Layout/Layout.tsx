@@ -112,7 +112,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         <div className={styles.footer}>
-          <Link to="/new" className={styles.createButton}>
+          <Link to="/articles/new" className={styles.createButton}>
             <PlusCircle size={18} />
             <span>New Article</span>
           </Link>

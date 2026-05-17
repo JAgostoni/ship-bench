@@ -13,12 +13,39 @@
   font-weight: 500;
   cursor: pointer;
   padding: var(--spacing-2) 0;
-  margin-bottom: var(--spacing-8);
   transition: color 150ms ease-in-out;
 }
 
 .backButton:hover {
   color: var(--color-accent);
+}
+
+.headerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-8);
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 150ms ease;
+}
+
+.editButton:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
 }
 
 .header {
@@ -65,6 +92,17 @@
   background-color: var(--color-bg-secondary);
   color: var(--color-draft);
   border: 1px solid var(--color-border);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.publishedBadge {
+  background-color: #ecfdf5;
+  color: var(--color-success);
+  border: 1px solid #a7f3d0;
   padding: 2px 8px;
   border-radius: var(--radius-sm);
   font-size: 0.75rem;

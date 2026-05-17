@@ -18,6 +18,9 @@ export const CreateArticleSchema = ArticleSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  slug: true,
+}).extend({
+  slug: z.string().min(1).optional(),
 });
 
 export const UpdateArticleSchema = CreateArticleSchema.partial();

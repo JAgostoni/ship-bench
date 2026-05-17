@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { ArrowLeft, Calendar, Tag as TagIcon, Clock } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag as TagIcon, Clock, Edit3 } from 'lucide-react';
 import { Markdown } from '../../components/Markdown/Markdown';
 import { Skeleton } from '../../components/Skeleton/Skeleton';
 import styles from './ArticleDetail.module.css';
@@ -29,15 +29,17 @@ export const ArticleDetail: React.FC = () => {
   if (isLoading) {
     return (
       <div className={styles.container}>
-        <Skeleton width="100px" height="20px" className={styles.backSkeleton} />
-        <Skeleton width="60%" height="40px" className={styles.titleSkeleton} />
+        <div className={styles.headerActions}>
+          <Skeleton width="100px" height="20px" />
+          <Skeleton width="80px" height="36px" />
+        </div>
+        <Skeleton width="60%" height="48px" className={styles.titleSkeleton} />
         <Skeleton width="40%" height="20px" className={styles.metaSkeleton} />
         <div className={styles.contentSkeleton}>
           <Skeleton height="20px" className={styles.lineSkeleton} />
           <Skeleton height="20px" className={styles.lineSkeleton} />
           <Skeleton height="20px" width="80%" className={styles.lineSkeleton} />
           <Skeleton height="200px" className={styles.boxSkeleton} />
-          <Skeleton height="20px" className={styles.lineSkeleton} />
         </div>
       </div>
     );
@@ -61,10 +63,17 @@ export const ArticleDetail: React.FC = () => {
 
   return (
     <article className={styles.container}>
-      <button onClick={() => navigate(-1)} className={styles.backButton}>
-        <ArrowLeft size={18} />
-        <span>Back</span>
-      </button>
+      <div className={styles.headerActions}>
+        <button onClick={() => navigate(-1)} className={styles.backButton}>
+          <ArrowLeft size={18} />
+          <span>Back</span>
+        </button>
+
+        <Link to={`/articles/${article.slug}/edit`} className={styles.editButton}>
+          <Edit3 size={16} />
+          <span>Edit</span>
+        </Link>
+      </div>
 
       <header className={styles.header}>
         {article.category && (
@@ -81,8 +90,10 @@ export const ArticleDetail: React.FC = () => {
             <Clock size={16} />
             <span>{Math.ceil(article.content.split(' ').length / 200)} min read</span>
           </div>
-          {article.status === 'DRAFT' && (
+          {article.status === 'DRAFT' ? (
             <span className={styles.draftBadge}>Draft</span>
+          ) : (
+            <span className={styles.publishedBadge}>Published</span>
           )}
         </div>
 
