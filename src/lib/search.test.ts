@@ -1,11 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { sanitizeSearchQuery } from './search';
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
-
-// Test search input sanitizer logic
-function sanitizeSearchQuery(input: string): string {
-  return input.replace(/[^\w\s]/g, '').trim();
-}
+import { describe, it, expect } from 'vitest';
 
 describe('Search Query Sanitation', () => {
   it('should remove special characters that crash FTS5 engines', () => {

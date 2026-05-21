@@ -20,13 +20,33 @@ export function LayoutShell({ sidebar, children }: LayoutShellProps) {
   const searchParams = useSearchParams();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  const isInitialMount = useRef(true);
+
   // Sync search input value with URL search param
   useEffect(() => {
     const currentSearch = searchParams.get('search') || '';
     setSearchValue(currentSearch);
   }, [searchParams]);
 
-  // Global Ctrl+K / Cmd+K handler
+  // Debounced search-as-you-type
+  useEffect(() => {
+    const currentParam = searchParams.get('search') || '';
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (searchValue === currentParam) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      executeSearch(searchValue, false);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [searchValue, searchParams]);
+
+  // Global Ctrl+K / Cmd+K and Esc handler
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -38,6 +58,9 @@ export function LayoutShell({ sidebar, children }: LayoutShellProps) {
         if (window.innerWidth < 768) {
           setIsMobileSearchActive(true);
         }
+      } else if (e.key === 'Escape') {
+        searchInputRef.current?.blur();
+        setIsMobileSearchActive(false);
       }
     };
 
@@ -47,10 +70,10 @@ export function LayoutShell({ sidebar, children }: LayoutShellProps) {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    executeSearch(searchValue);
+    executeSearch(searchValue, true);
   };
 
-  const executeSearch = (value: string) => {
+  const executeSearch = (value: string, shouldBlur = false) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value.trim()) {
       params.set('search', value.trim());
@@ -60,7 +83,9 @@ export function LayoutShell({ sidebar, children }: LayoutShellProps) {
     
     // Close mobile search on submit
     setIsMobileSearchActive(false);
-    searchInputRef.current?.blur();
+    if (shouldBlur) {
+      searchInputRef.current?.blur();
+    }
     
     router.push(`/articles?${params.toString()}`);
   };
@@ -68,7 +93,6 @@ export function LayoutShell({ sidebar, children }: LayoutShellProps) {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setSearchValue(val);
-    // Note: Debounced search-as-you-type can be implemented in Iteration 3
   };
 
   const toggleSidebar = () => {

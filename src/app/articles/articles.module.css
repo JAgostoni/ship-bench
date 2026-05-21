@@ -1,0 +1,284 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-md) 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.titleGroup h1 {
+  font-size: var(--fs-xxl);
+  font-weight: 700;
+  color: hsl(var(--text-primary-hsl));
+  margin-bottom: var(--spacing-xxs);
+}
+
+.titleGroup p {
+  font-size: var(--fs-sm);
+  color: hsl(var(--text-secondary-hsl));
+  margin: 0;
+}
+
+.countBadge {
+  background-color: hsl(var(--accent-soft-hsl));
+  color: hsl(var(--accent-primary-hsl));
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  border: 1px solid hsla(var(--accent-primary-hsl), 0.1);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: hsl(var(--bg-elevated-hsl));
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid hsl(var(--border-color-hsl));
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: hsl(var(--accent-primary-hsl) / 0.4);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardContent {
+  flex: 1;
+  min-width: 0;
+  margin-right: var(--spacing-lg);
+}
+
+.cardTitle {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: hsl(var(--text-primary-hsl));
+  margin: 0;
+  margin-bottom: var(--spacing-xxs);
+}
+
+.cardSnippet {
+  font-size: var(--fs-base);
+  color: hsl(var(--text-secondary-hsl));
+  margin: 0;
+  margin-bottom: var(--spacing-sm);
+  
+  /* CSS Line-clamp 1 */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.pill {
+  font-size: var(--fs-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.categoryPill {
+  background-color: hsl(var(--bg-secondary-hsl));
+  color: hsl(var(--text-secondary-hsl));
+  border: 1px solid hsl(var(--border-color-hsl));
+}
+
+.statusPill {
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusPublished {
+  background-color: var(--status-pub-bg);
+  color: var(--status-pub-text);
+}
+
+.statusDraft {
+  background-color: var(--status-draft-bg);
+  color: var(--status-draft-text);
+}
+
+.dateText {
+  font-size: var(--fs-xs);
+  color: hsl(var(--text-muted-hsl));
+}
+
+.arrowLink {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: hsl(var(--accent-primary-hsl));
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+.card:hover .arrowLink {
+  color: hsl(var(--accent-hover-hsl));
+}
+
+/* UX Empty State Illustration via absolute CSS Shapes */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-xxl) var(--spacing-lg);
+  background-color: hsl(var(--bg-elevated-hsl));
+  border-radius: var(--radius-lg);
+  border: 1px dashed hsl(var(--border-color-hsl));
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--spacing-md);
+}
+
+.illustration {
+  position: relative;
+  width: 140px;
+  height: 120px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.illustrationCircle {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsl(var(--accent-soft-hsl)) 0%, transparent 70%);
+  opacity: 0.8;
+}
+
+.illustrationDoc {
+  position: absolute;
+  top: 30px;
+  left: 45px;
+  width: 45px;
+  height: 60px;
+  background-color: hsl(var(--bg-secondary-hsl));
+  border: 2px solid hsl(var(--border-color-hsl));
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.illustrationDoc::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  background-color: hsl(var(--border-color-hsl));
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.illustrationDocLines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 6px 6px;
+}
+
+.illustrationLine {
+  height: 2px;
+  background-color: hsl(var(--border-color-hsl));
+  border-radius: var(--radius-full);
+}
+
+.illustrationLine:nth-child(1) { width: 80%; }
+.illustrationLine:nth-child(2) { width: 60%; }
+.illustrationLine:nth-child(3) { width: 70%; }
+
+.illustrationMagnifier {
+  position: absolute;
+  bottom: 15px;
+  left: 25px;
+  width: 36px;
+  height: 36px;
+  border: 3px solid hsl(var(--accent-primary-hsl));
+  border-radius: 50%;
+  background-color: hsl(var(--bg-elevated-hsl) / 0.8);
+  backdrop-filter: blur(2px);
+  box-shadow: var(--shadow-md);
+}
+
+.illustrationMagnifier::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  right: -9px;
+  width: 12px;
+  height: 4px;
+  background-color: hsl(var(--accent-primary-hsl));
+  transform: rotate(45deg);
+  border-radius: var(--radius-full);
+}
+
+.emptyState h3 {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: hsl(var(--text-primary-hsl));
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.emptyState p {
+  font-size: var(--fs-sm);
+  color: hsl(var(--text-secondary-hsl));
+  margin: 0 0 var(--spacing-lg) 0;
+  max-width: 320px;
+}
+
+.clearBtn {
+  display: inline-block;
+  background-color: hsl(var(--accent-primary-hsl));
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.clearBtn:hover {
+  background-color: hsl(var(--accent-hover-hsl));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.clearBtn:active {
+  transform: translateY(0);
+}
