@@ -1,0 +1,295 @@
+/* src/styles/globals.css */
+@import './variables.css';
+
+/* Modern standard CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  letter-spacing: -0.011em;
+  background-color: hsl(var(--bg-primary-hsl));
+  color: hsl(var(--text-primary-hsl));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Links and Lists Resets */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+input, button, select, textarea {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Typography styles matching the design spec */
+h1 {
+  font-size: var(--fs-xxl);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.022em;
+  color: hsl(var(--text-primary-hsl));
+}
+
+h2 {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.021em;
+  color: hsl(var(--text-primary-hsl));
+}
+
+h3 {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.018em;
+  color: hsl(var(--text-primary-hsl));
+}
+
+h4 {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+}
+
+p {
+  font-size: var(--fs-base);
+  color: hsl(var(--text-secondary-hsl));
+  margin-bottom: var(--spacing-md);
+}
+
+small {
+  font-size: var(--fs-xs);
+  color: hsl(var(--text-muted-hsl));
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-color: hsl(var(--border-glow-hsl));
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--bg-primary-hsl));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border-color-hsl));
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--text-muted-hsl));
+}
+
+/* Global layouts classes */
+.shellContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: hsl(var(--bg-primary-hsl));
+}
+
+.globalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 var(--spacing-lg);
+  background-color: hsl(var(--bg-elevated-hsl));
+  border-bottom: 1px solid hsl(var(--border-color-hsl));
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: hsl(var(--text-primary-hsl));
+  transition: opacity var(--transition-fast);
+}
+
+.logoLink:hover {
+  opacity: 0.8;
+}
+
+.logoIcon {
+  font-size: var(--fs-xl);
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  background-color: hsl(var(--bg-secondary-hsl));
+  border: 1px solid hsl(var(--border-color-hsl));
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  width: 100%;
+  max-width: 480px;
+  gap: var(--spacing-xs);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.searchWrapper:focus-within {
+  border-color: hsl(var(--accent-primary-hsl));
+  box-shadow: var(--shadow-focus);
+  background-color: hsl(var(--bg-elevated-hsl));
+}
+
+.searchIcon {
+  font-size: var(--fs-sm);
+  color: hsl(var(--text-muted-hsl));
+  user-select: none;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: var(--fs-sm);
+  color: hsl(var(--text-primary-hsl));
+  outline: none;
+  background: transparent;
+  height: 32px;
+}
+
+.searchInput::placeholder {
+  color: hsl(var(--text-muted-hsl));
+}
+
+.kbdBadge {
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  background-color: hsl(var(--bg-elevated-hsl));
+  border: 1px solid hsl(var(--border-color-hsl));
+  border-radius: var(--radius-xs);
+  padding: 2px var(--spacing-xxs);
+  color: hsl(var(--text-muted-hsl));
+  pointer-events: none;
+  user-select: none;
+  display: inline-block;
+}
+
+/* Layout Grid Container */
+.layoutGrid {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.mainPane {
+  flex: 1;
+  padding: var(--spacing-lg);
+  background-color: hsl(var(--bg-primary-hsl));
+  min-width: 0;
+  overflow-y: auto;
+  outline: none;
+}
+
+/* Screen readers helper */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Homepage styling utilities */
+.btnPrimary {
+  display: inline-block;
+  background-color: hsl(var(--accent-primary-hsl));
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.btnPrimary:hover {
+  background-color: hsl(var(--accent-hover-hsl));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btnPrimary:active {
+  transform: translateY(0);
+}
+
+.homeCard {
+  background-color: hsl(var(--bg-elevated-hsl));
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border-color-hsl));
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.articleCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: hsl(var(--bg-elevated-hsl));
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid hsl(var(--border-color-hsl));
+  transition: all var(--transition-fast);
+}
+
+.articleCard:hover {
+  border-color: hsl(var(--accent-primary-hsl) / 0.4);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.articleCard:active {
+  transform: translateY(0);
+}
+

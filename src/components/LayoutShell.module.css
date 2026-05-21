@@ -1,0 +1,276 @@
+/* src/components/LayoutShell.module.css */
+
+.shellContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  background-color: hsl(var(--bg-primary-hsl));
+}
+
+.globalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 var(--spacing-lg);
+  background-color: hsl(var(--bg-elevated-hsl));
+  border-bottom: 1px solid hsl(var(--border-color-hsl));
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.leftGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Hamburger & Toggle Buttons styling */
+.menuToggleBtn {
+  display: none; /* Hidden on Desktop */
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  color: hsl(var(--text-secondary-hsl));
+  background-color: transparent;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.menuToggleBtn:hover {
+  background-color: hsl(var(--bg-secondary-hsl));
+  color: hsl(var(--text-primary-hsl));
+  border-color: hsl(var(--border-color-hsl));
+}
+
+.menuToggleIcon {
+  font-size: var(--fs-lg);
+  line-height: 1;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: hsl(var(--text-primary-hsl));
+  transition: opacity var(--transition-fast);
+}
+
+.logoLink:hover {
+  opacity: 0.8;
+}
+
+.logoIcon {
+  font-size: var(--fs-xl);
+}
+
+.logoText {
+  letter-spacing: -0.02em;
+}
+
+/* Search Wrapper & Mobile Modal */
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  background-color: hsl(var(--bg-secondary-hsl));
+  border: 1px solid hsl(var(--border-color-hsl));
+  border-radius: var(--radius-md);
+  padding: 2px var(--spacing-sm);
+  width: 100%;
+  max-width: 480px;
+  gap: var(--spacing-xs);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.searchWrapper:focus-within {
+  border-color: hsl(var(--accent-primary-hsl));
+  box-shadow: var(--shadow-focus);
+  background-color: hsl(var(--bg-elevated-hsl));
+}
+
+.searchIcon {
+  font-size: var(--fs-sm);
+  color: hsl(var(--text-muted-hsl));
+  user-select: none;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: var(--fs-sm);
+  color: hsl(var(--text-primary-hsl));
+  outline: none;
+  background: transparent;
+  height: 36px; /* Ensure good input touch size */
+}
+
+.searchInput::placeholder {
+  color: hsl(var(--text-muted-hsl));
+}
+
+.kbdBadge {
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  background-color: hsl(var(--bg-elevated-hsl));
+  border: 1px solid hsl(var(--border-color-hsl));
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+  color: hsl(var(--text-muted-hsl));
+  pointer-events: none;
+  user-select: none;
+  display: inline-block;
+}
+
+/* Right Header Group */
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.newArticleBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: hsl(var(--accent-primary-hsl));
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: var(--fs-sm);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.newArticleBtn:hover {
+  background-color: hsl(var(--accent-hover-hsl));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.newArticleBtn:active {
+  transform: translateY(0);
+}
+
+/* Layout Grid and Panels */
+.layoutGrid {
+  display: flex;
+  flex: 1;
+  position: relative;
+  min-height: calc(100vh - 64px);
+}
+
+.mainPane {
+  flex: 1;
+  padding: var(--spacing-xl);
+  background-color: hsl(var(--bg-primary-hsl));
+  min-width: 0;
+  overflow-y: auto;
+  outline: none;
+  transition: padding var(--transition-normal);
+}
+
+/* Scrim overlay when sidebar is active on Mobile/Tablet */
+.scrim {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 64px);
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 85;
+  transition: opacity var(--transition-normal);
+}
+
+.scrimActive {
+  display: block;
+}
+
+/* Mobile search overlay modal */
+.mobileSearchOverlay {
+  display: none;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1023px) {
+  .menuToggleBtn {
+    display: flex; /* Show Hamburger / Collapsed Sidebar Trigger */
+    min-width: 48px;
+    min-height: 48px; /* Touch target minimum */
+  }
+
+  .kbdBadge {
+    display: none; /* Hide keyboard shortcut hints on tablet and mobile */
+  }
+
+  .mainPane {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 767px) {
+  .globalHeader {
+    padding: 0 var(--spacing-md);
+  }
+
+  .newArticleBtn {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0;
+    justify-content: center;
+    border-radius: var(--radius-full);
+  }
+
+  .newArticleText {
+    display: none; /* Hide text on mobile, just show icon */
+  }
+
+  .searchWrapper {
+    max-width: 180px;
+  }
+
+  /* Full Screen Mobile Search Modal when active */
+  .mobileSearchActive .searchWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 64px;
+    max-width: none;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid hsl(var(--border-color-hsl));
+    z-index: 110;
+    padding: 0 var(--spacing-lg);
+    background-color: hsl(var(--bg-elevated-hsl));
+  }
+
+  .mobileSearchActive .mobileSearchCloseBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    font-size: var(--fs-md);
+    color: hsl(var(--text-secondary-hsl));
+  }
+}
+
+.mobileSearchCloseBtn {
+  display: none;
+}
