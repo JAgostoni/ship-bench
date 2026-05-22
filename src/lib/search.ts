@@ -19,7 +19,7 @@ export async function searchArticles(queryStr: string) {
   }
 
   // Boost title matches by 3x over content matches
-  const ftsQuery = `title:(${sanitizedQuery})^3 OR content:(${sanitizedQuery})`;
+  const ftsQuery = `title:(${sanitizedQuery}) OR content:(${sanitizedQuery})`;
 
   // We perform raw SQL query using Drizzle since articles_fts is a virtual table not managed by standard drizzle models
   const results = await db.all<any>(sql`
@@ -37,7 +37,7 @@ export async function searchArticles(queryStr: string) {
     JOIN articles a ON a.id = fts.id
     LEFT JOIN categories c ON c.id = a.category_id
     WHERE articles_fts MATCH ${ftsQuery} AND a.status = 'published'
-    ORDER BY bm25 ASC
+    ORDER BY bm25(articles_fts, 0.0, 3.0, 1.0) ASC
   `);
 
   // Map dates since raw SQL results return raw timestamps in milliseconds

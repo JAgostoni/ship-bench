@@ -2,29 +2,12 @@
 'use server';
 
 import { db } from './db';
-import { articles } from './schema';
-import { eq, and, ne } from 'drizzle-orm';
+import { articles, categories } from './schema';
+import { eq, and, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 
-// Article Zod Validation Schema
-export const articleSchema = z.object({
-  title: z.string()
-    .min(2, 'Title must be at least 2 characters')
-    .max(100, 'Title must be under 100 characters'),
-  slug: z.string()
-    .min(1, 'Slug is required')
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be URL-friendly (lowercase letters, numbers, and hyphens only, e.g. "my-article-slug")'),
-  content: z.string()
-    .min(5, 'Content must be at least 5 characters'),
-  categoryId: z.preprocess(
-    (val) => (val === '' || val === undefined || val === 'none' || val === null ? null : Number(val)),
-    z.number().nullable()
-  ),
-  status: z.enum(['draft', 'published']),
-});
-
-export type ArticleFormValues = z.infer<typeof articleSchema>;
+import { articleSchema } from './validation';
 
 export interface ActionResponse {
   success: boolean;
@@ -179,3 +162,61 @@ export async function updateArticleAction(articleId: number, data: unknown): Pro
     };
   }
 }
+
+/**
+ * Server action to get the total number of articles (both draft and published)
+ * in a category before deletion.
+ */
+export async function getCategoryArticleCountAction(categoryId: number): Promise<{ count: number }> {
+  try {
+    const result = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(articles)
+      .where(eq(articles.categoryId, categoryId))
+      .all();
+    return { count: result[0]?.count || 0 };
+  } catch (err) {
+    console.error('Error in getCategoryArticleCountAction:', err);
+    return { count: 0 };
+  }
+}
+
+/**
+ * Server action to delete a category.
+ * Updates all matching articles to categoryId = null (handled by SQLite ON DELETE SET NULL).
+ */
+export async function deleteCategoryAction(categoryId: number): Promise<{ success: boolean; error?: string }> {
+  try {
+    // Perform delete on categories table
+    await db.delete(categories).where(eq(categories.id, categoryId));
+    
+    // Revalidate paths
+    revalidatePath('/articles');
+    revalidatePath('/');
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error('Error in deleteCategoryAction:', err);
+    return { success: false, error: err.message || 'An unexpected database error occurred.' };
+  }
+}
+
+/**
+ * Server action to delete an article.
+ * Automatically handles SQLite FTS5 trigger deletion.
+ */
+export async function deleteArticleAction(articleId: number): Promise<{ success: boolean; error?: string }> {
+  try {
+    await db.delete(articles).where(eq(articles.id, articleId));
+    
+    revalidatePath('/articles');
+    revalidatePath('/');
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error('Error in deleteArticleAction:', err);
+    return { success: false, error: err.message || 'An unexpected database error occurred.' };
+  }
+}
+
+

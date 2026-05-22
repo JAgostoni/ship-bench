@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { marked } from 'marked';
 import DOMPurify from 'isomorphic-dompurify';
+import { DeleteArticleButton } from '@/components/DeleteArticleButton';
 import styles from './page.module.css';
 
 interface ArticleDetailPageProps {
@@ -110,15 +111,8 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
             <span>✏️</span> Edit Article
           </Link>
 
-          {/* Note: Delete functionality and confirm dialog will be fully operational in Iteration 5 */}
-          <button 
-            type="button" 
-            className={styles.deleteBtn}
-            aria-label="Delete Article"
-            title="Delete Article"
-          >
-            🗑️
-          </button>
+          {/* High-fidelity Delete Button with modal confirmation */}
+          <DeleteArticleButton articleId={id} articleTitle={title} />
         </div>
       </div>
 

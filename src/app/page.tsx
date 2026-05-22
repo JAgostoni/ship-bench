@@ -102,7 +102,7 @@ export default async function HomePage() {
                   color: article.status === 'published' ? 'var(--status-pub-text)' : 'var(--status-draft-text)',
                   fontWeight: 600
                 }}>
-                  {article.status}
+                  <span className="sr-only">Article Status: </span>{article.status}
                 </span>
               </Link>
             ))}

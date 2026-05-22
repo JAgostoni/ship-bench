@@ -1,6 +1,6 @@
 // src/lib/actions.test.ts
 import { describe, it, expect } from 'vitest';
-import { articleSchema } from './actions';
+import { articleSchema } from './validation';
 
 describe('Article Schema Validation', () => {
   it('should validate complete and correct article inputs', () => {

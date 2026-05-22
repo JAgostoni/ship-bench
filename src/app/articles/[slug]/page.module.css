@@ -98,11 +98,12 @@
 .editBtn:hover {
   background-color: hsl(var(--accent-primary-hsl));
   color: white;
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .editBtn:active {
-  transform: translateY(1px);
+  transform: translateY(0);
 }
 
 .deleteBtn {
@@ -122,6 +123,12 @@
   border-color: hsl(0, 84%, 75%);
   color: hsl(0, 84%, 40%);
   background-color: hsl(0, 84%, 97%);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.deleteBtn:active {
+  transform: translateY(0);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -130,6 +137,7 @@
     color: hsl(0, 84%, 75%);
   }
 }
+
 
 /* Main Text Canvas */
 .canvas {
