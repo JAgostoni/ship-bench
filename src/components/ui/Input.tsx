@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { cx } from "@/lib/cx";
 import { AlertCircleIcon } from "./icons";
 
@@ -10,14 +10,17 @@ export type InputProps = {
   error?: string;
   /** Optional 16px leading icon inside the field. */
   leadingIcon?: ReactNode;
+  /** Optional content pinned at the field's right edge (kbd hint / search spinner, §4.3). */
+  trailingSlot?: ReactNode;
   id: string;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "id">;
+} & Omit<ComponentProps<"input">, "id">;
 
 export function Input({
   label,
   labelHidden = false,
   error,
   leadingIcon,
+  trailingSlot,
   id,
   className,
   ...rest
@@ -47,12 +50,18 @@ export function Input({
             "h-10 w-full rounded-sm border bg-surface px-3 text-md",
             "placeholder:text-text-muted",
             leadingIcon ? "pl-9" : null,
+            trailingSlot ? "pr-10" : null,
             error
               ? "border-danger"
               : "border-border-strong hover:border-text-secondary",
           )}
           {...rest}
         />
+        {trailingSlot && (
+          <span className="pointer-events-none absolute inset-y-0 right-3 inline-flex items-center">
+            {trailingSlot}
+          </span>
+        )}
       </div>
       {error && (
         <p

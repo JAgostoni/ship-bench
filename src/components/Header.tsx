@@ -1,14 +1,13 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { SearchBox } from "@/components/SearchBox";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FileTextIcon, PlusIcon, SearchIcon } from "@/components/ui/icons";
 
 /**
- * Global sticky header (design §1.3): logo + name → "/", search, "New article".
- *
- * The search area is the iteration-3 stub: a plain GET form to /search.
- * Iteration 4 replaces it wholesale with the SearchBox combobox (dropdown,
- * debounce, "/" shortcut).
+ * Global sticky header (design §1.3): logo + name → "/", SearchBox combobox,
+ * "New article".
  */
 export function Header() {
   return (
@@ -23,22 +22,11 @@ export function Header() {
           <span className="max-md:sr-only">Team KB</span>
         </Link>
         <div className="flex min-w-0 flex-1 justify-center">
-          <form
-            role="search"
-            action="/search"
-            method="get"
-            className="w-full max-w-search"
-          >
-            <Input
-              id="header-search"
-              label="Search articles"
-              labelHidden
-              type="search"
-              name="q"
-              placeholder="Search articles…"
-              leadingIcon={<SearchIcon />}
-            />
-          </form>
+          {/* SearchBox reads useSearchParams (the /search pre-fill), which
+              requires a Suspense boundary during prerender. */}
+          <Suspense fallback={<SearchBoxFallback />}>
+            <SearchBox />
+          </Suspense>
         </div>
         <Button
           href="/articles/new"
@@ -52,5 +40,22 @@ export function Header() {
         </Button>
       </div>
     </header>
+  );
+}
+
+/** Visually identical placeholder shown only while the SearchBox suspends. */
+function SearchBoxFallback() {
+  return (
+    <div role="search" className="w-full max-w-search">
+      <Input
+        id="header-search"
+        label="Search articles"
+        labelHidden
+        type="search"
+        placeholder="Search articles…"
+        leadingIcon={<SearchIcon />}
+        readOnly
+      />
+    </div>
   );
 }
