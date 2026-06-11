@@ -1,1 +1,251 @@
 @import "tailwindcss";
+
+/*
+ * Design tokens — the single source of all colors, sizes, shadows, and fonts
+ * (design spec §6, normative). No hex, px-size, or shadow values may appear
+ * anywhere outside this file (design §8.2). Light theme only in v1.
+ *
+ * Spacing uses Tailwind's default 4px scale; allowed steps (design §6.4):
+ * 4, 8, 12, 16, 24, 32, 48, 64 (space-1/2/3/4/6/8/12/16).
+ */
+@theme {
+  /* -- colors (design §6.1; all pairs AA-verified in §7.1) ------------- */
+  --color-*: initial;
+
+  /* surfaces */
+  --color-bg: #fafaf9; /* page background */
+  --color-surface: #ffffff; /* cards, header, inputs, dialogs */
+  --color-border: #e7e5e4; /* hairlines, dividers, card borders */
+  --color-border-strong: #78716c; /* form-control borders (≥3:1 non-text) */
+
+  /* text */
+  --color-text: #1c1917; /* headings, body          — 16.1:1 on surface */
+  --color-text-secondary: #57534e; /* meta, snippets, labels  —  7.1:1 */
+  --color-text-muted: #78716c; /* placeholders, hints     —  4.8:1 */
+
+  /* accent (single hue: calm blue) */
+  --color-accent: #1d4ed8; /* links, primary buttons  — 6.4:1 on white */
+  --color-accent-hover: #1e40af;
+  --color-focus: #1d4ed8; /* focus rings */
+
+  /* semantic */
+  --color-danger: #b91c1c; /* danger fills/borders — white text = 5.9:1 */
+  --color-danger-hover: #991b1b;
+  --color-danger-text: #b91c1c; /* danger text on white/danger-bg */
+  --color-danger-bg: #fef2f2;
+  --color-success-text: #15803d; /* reserved; v1 has no success banners */
+  --color-mark: #fde68a; /* search highlight bg; text stays --color-text */
+
+  /* button/filled-control foreground (design §4.1 uses #fff on fills) */
+  --color-white: #ffffff;
+
+  /* -- elevation & radii (design §6.1) --------------------------------- */
+  --shadow-*: initial;
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.16);
+
+  --radius-*: initial;
+  --radius-sm: 6px; /* buttons, inputs */
+  --radius-md: 8px; /* cards, dialogs, dropdown */
+
+  /* -- typography (design §6.2) — system stacks, no webfont ------------ */
+  --font-*: initial;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+
+  /* type scale — the only sizes used anywhere in the app */
+  --text-*: initial;
+  --text-xs: 12px; /* char counters, kbd hint */
+  --text-xs--line-height: 1.4;
+  --text-sm: 13px; /* meta lines, helper text, errors, badges */
+  --text-sm--line-height: 1.5;
+  --text-base: 14px; /* UI controls, snippets, dialog body, labels */
+  --text-base--line-height: 1.5;
+  --text-md: 16px; /* article body, inputs, dropdown titles */
+  --text-md--line-height: 1.65;
+  --text-lg: 18px; /* card/dialog/empty-state titles */
+  --text-lg--line-height: 1.4;
+  --text-xl: 22px; /* section h1 (search results, editor pages) */
+  --text-xl--line-height: 1.3;
+  --text-2xl: 28px; /* page h1 (home "Articles", article titles) */
+  --text-2xl--line-height: 1.25;
+
+  /* -- layout widths (design §1.3, §5) --------------------------------- */
+  --container-*: initial;
+  --container-page: 1100px; /* main content column */
+  --container-search: 480px; /* header search box */
+  --container-empty: 380px; /* EmptyState block */
+  --container-prose: 72ch; /* ArticleBody reading column */
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--text-md--line-height);
+  }
+
+  /* Shared focus treatment for everything interactive (design §4 note). */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}
+
+/* Spinner (loader-circle icon): 0.8s linear, reduced-motion guarded
+   (design §6.5, §7.6). */
+@media (prefers-reduced-motion: no-preference) {
+  .spinner {
+    animation: spinner-rotate 0.8s linear infinite;
+  }
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+ * ArticleBody prose styles (design §6.3) — rendered Markdown on the article
+ * detail page and, identically, in the iteration-5 editor preview.
+ */
+@layer components {
+  .article-body {
+    max-width: var(--container-prose);
+    font-size: var(--text-md);
+    line-height: var(--text-md--line-height);
+  }
+
+  .article-body > :first-child {
+    margin-top: 0;
+  }
+
+  .article-body p {
+    margin-bottom: 16px;
+  }
+
+  /* Content headings step below the 28px page h1; levels are not remapped. */
+  .article-body h1 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 32px;
+    margin-bottom: 16px;
+  }
+
+  .article-body h2 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .article-body h3,
+  .article-body h4,
+  .article-body h5,
+  .article-body h6 {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  .article-body ul {
+    list-style: disc;
+  }
+
+  .article-body ol {
+    list-style: decimal;
+  }
+
+  .article-body li + li {
+    margin-top: 6px;
+  }
+
+  .article-body li > ul,
+  .article-body li > ol {
+    margin-top: 6px;
+    margin-bottom: 0;
+  }
+
+  .article-body code {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    background-color: #f5f5f4;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .article-body pre {
+    background-color: #f5f5f4;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+
+  .article-body pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  /* GFM tables; ArticleBody wraps each table in an overflow-x-auto div. */
+  .article-body table {
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+
+  .article-body th,
+  .article-body td {
+    border: 1px solid var(--color-border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+
+  .article-body th {
+    background-color: var(--color-bg);
+    font-weight: 600;
+  }
+
+  .article-body blockquote {
+    border-left: 3px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    padding-left: 16px;
+    margin-bottom: 16px;
+  }
+
+  .article-body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .article-body a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .article-body img {
+    max-width: 100%;
+    border-radius: var(--radius-sm);
+  }
+
+  .article-body hr {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    margin: 24px 0;
+  }
+}
