@@ -1,0 +1,47 @@
+{
+  "name": "team-kb",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:migrate": "tsx src/lib/db/migrate.ts",
+    "db:seed": "tsx src/lib/seed.ts",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check": "tsc --noEmit && eslint . && prettier --check . && vitest run"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.10.0",
+    "drizzle-orm": "0.45.2",
+    "next": "16.2.7",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "^4.0.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.60.0",
+    "@tailwindcss/postcss": "4.3.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.7",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.0",
+    "tailwindcss": "4.3.0",
+    "tsx": "^4.20.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

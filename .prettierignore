@@ -1,0 +1,10 @@
+data/
+drizzle/
+playwright-report/
+test-results/
+.next/
+node_modules/
+package-lock.json
+next-env.d.ts
+docs/
+.claude/
