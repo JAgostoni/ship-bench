@@ -92,6 +92,16 @@ Where the out-of-scope features fit later, so v1 decisions don't paint us into a
 | 8 | Exact dependency versions are taken from architecture §1 (live-verified 2026-06-10) and pinned in iteration 1 | Re-verifying versions at implementation time | The brief's live-search mandate was satisfied yesterday by the architecture spec, which is the approved source of truth. Iteration 1 pins those exact versions; if `npm install` surfaces a newer patch release, take the patch but never a new minor/major without checking the spec's compatibility notes. |
 | 9 | Seed data (12 articles) ships in iteration 1, before the API exists | Seed in iteration 2 alongside the repo | Every iteration from 2 onward needs realistic data to verify against and demo with; the seed script only needs the schema, which iteration 1 creates. |
 
+### Implementation-time addenda (appended during iteration 6)
+
+Detailed per-iteration decisions live in each `docs/iteration-N-summary.md` decisions log; the rows below record only the cross-iteration tradeoffs made while implementing, so this log stays the single "short decisions log" entry point the brief requires.
+
+| # | Decision | Alternative rejected | Why |
+|---|---|---|---|
+| 10 | Per-iteration implementation decisions are logged in `docs/iteration-N-summary.md` (1–6), not duplicated here | Mirroring every row into this table | Keeps this log short (brief: "short decisions log") while every decision stays discoverable one link away. |
+| 11 | E2E determinism via **content-level reset**: tests open `data/kb-e2e.sqlite` directly (better-sqlite3, WAL) and delete/reinsert rows; the seed articles moved to `src/lib/seed-data.ts` so the script and the fixtures share one source | Deleting and recreating the DB file before each run | The Playwright `webServer` holds the file open — Windows refuses the delete, and the architecture's WAL setup already makes cross-process row-level access safe. The seed script's behavior is unchanged. |
+| 12 | E2E specs run serially (`workers: 1`), each resetting the DB state it needs | Per-worker servers and databases for parallelism | All specs share one server and one SQLite file; 8 tests finish in ~30 s, so parallel infrastructure would be pure complexity. Specs stay order-independent because each resets its own state. |
+
 ---
 
 ## 6. Iteration files

@@ -29,7 +29,7 @@ npm run test:e2e      # Playwright E2E (run `npx playwright install chromium` on
 npm run check         # full quality gate: typecheck + ESLint + Prettier + unit tests
 ```
 
-The E2E suite builds and starts the app itself against a separate database (`data/kb-e2e.sqlite`).
+The E2E suite builds and starts the app itself against a separate database (`data/kb-e2e.sqlite`), which it resets to the 12 seed articles before every run — your dev database is never touched.
 
 ## Scripts
 
