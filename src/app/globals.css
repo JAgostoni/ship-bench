@@ -39,6 +39,9 @@
   /* button/filled-control foreground (design §4.1 uses #fff on fills) */
   --color-white: #ffffff;
 
+  /* dialog backdrop (design §4.4) */
+  --color-backdrop: rgb(0 0 0 / 0.4);
+
   /* -- elevation & radii (design §6.1) --------------------------------- */
   --shadow-*: initial;
   --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
@@ -80,6 +83,7 @@
   --container-search: 480px; /* header search box */
   --container-empty: 380px; /* EmptyState block */
   --container-prose: 72ch; /* ArticleBody reading column */
+  --container-dialog: 400px; /* ConfirmDialog (design §4.4) */
 }
 
 @layer base {
@@ -138,6 +142,18 @@
   from {
     opacity: 0;
     transform: translateY(-4px);
+  }
+}
+
+/*
+ * Editor preview pane (design §2.3): on desktop it scrolls independently while
+ * the textarea grows the page. The offset approximates header (56px) + sticky
+ * heading row + title field above the panes.
+ */
+@media (min-width: 1024px) {
+  .editor-preview {
+    max-height: calc(100vh - 240px);
+    overflow-y: auto;
   }
 }
 
