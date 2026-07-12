@@ -1,0 +1,36 @@
+import type { InputHTMLAttributes } from "react";
+
+type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+  error?: boolean;
+};
+
+/**
+ * Text input — design-spec §6.2.
+ */
+export function Input({
+  className = "",
+  error = false,
+  disabled,
+  ...rest
+}: InputProps) {
+  return (
+    <input
+      disabled={disabled}
+      aria-invalid={error || undefined}
+      className={[
+        "h-10 w-full rounded-[var(--radius-md)] border bg-[var(--color-bg-elevated)] px-3 text-sm text-[var(--color-text)]",
+        "placeholder:text-[var(--color-text-muted)]",
+        "transition-colors hover:border-[var(--color-border-strong)]",
+        "focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus-ring)]/30",
+        "disabled:cursor-not-allowed disabled:bg-[var(--color-bg-subtle)] disabled:text-[var(--color-text-muted)]",
+        error
+          ? "border-[var(--color-danger)] focus:ring-[var(--color-danger)]/20"
+          : "border-[var(--color-border)]",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      {...rest}
+    />
+  );
+}
