@@ -107,10 +107,18 @@ export function ArticleForm({
     [mode, slugTouched],
   );
 
+  const MAX_TAGS = 20;
+
   const toggleTag = (id: string) => {
-    setTagIds((prev) =>
-      prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id],
-    );
+    setTagIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((t) => t !== id);
+      }
+      if (prev.length >= MAX_TAGS) {
+        return prev;
+      }
+      return [...prev, id];
+    });
   };
 
   const scrollToFirstError = (errors: FieldErrors) => {
@@ -353,20 +361,27 @@ export function ArticleForm({
 
       <div id="field-categoryId">
         <Label htmlFor="categoryId">Category</Label>
-        <Select
-          id="categoryId"
-          name="categoryId"
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
-          error={Boolean(firstError(fieldErrors, "categoryId"))}
-        >
-          <option value="">No category</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </Select>
+        {categories.length === 0 ? (
+          <p className="text-sm text-[var(--color-text-muted)]">
+            No categories yet. Categories appear here once defined (seed or
+            create).
+          </p>
+        ) : (
+          <Select
+            id="categoryId"
+            name="categoryId"
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            error={Boolean(firstError(fieldErrors, "categoryId"))}
+          >
+            <option value="">No category</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </Select>
+        )}
         {firstError(fieldErrors, "categoryId") ? (
           <p className="mt-1 text-sm text-[var(--color-danger)]">
             {firstError(fieldErrors, "categoryId")}
@@ -380,6 +395,11 @@ export function ArticleForm({
           className="mb-1 block text-sm font-medium text-[var(--color-text)]"
         >
           Tags
+          {tagIds.length > 0 ? (
+            <span className="ml-1 font-normal text-[var(--color-text-muted)]">
+              ({tagIds.length}/{MAX_TAGS})
+            </span>
+          ) : null}
         </span>
         {tags.length === 0 ? (
           <p className="text-sm text-[var(--color-text-muted)]">
@@ -391,22 +411,31 @@ export function ArticleForm({
             aria-labelledby="tags-label"
             className="max-h-48 space-y-1 overflow-y-auto rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-3"
           >
-            {tags.map((tag) => (
-              <label
-                key={tag.id}
-                className="flex min-h-9 cursor-pointer items-center gap-2 text-sm text-[var(--color-text)]"
-              >
-                <input
-                  type="checkbox"
-                  name="tagIds"
-                  value={tag.id}
-                  checked={tagIds.includes(tag.id)}
-                  onChange={() => toggleTag(tag.id)}
-                  className="size-4 accent-[var(--color-accent)]"
-                />
-                {tag.name}
-              </label>
-            ))}
+            {tags.map((tag) => {
+              const checked = tagIds.includes(tag.id);
+              const atLimit = tagIds.length >= MAX_TAGS && !checked;
+              return (
+                <label
+                  key={tag.id}
+                  className={`flex min-h-9 items-center gap-2 text-sm text-[var(--color-text)] ${
+                    atLimit
+                      ? "cursor-not-allowed opacity-50"
+                      : "cursor-pointer"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    name="tagIds"
+                    value={tag.id}
+                    checked={checked}
+                    disabled={atLimit}
+                    onChange={() => toggleTag(tag.id)}
+                    className="size-4 accent-[var(--color-accent)]"
+                  />
+                  {tag.name}
+                </label>
+              );
+            })}
           </div>
         )}
         {firstError(fieldErrors, "tagIds") ? (

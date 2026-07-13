@@ -79,18 +79,25 @@ export function ArticleFilters({
             >
               Category
             </label>
-            <Select
-              id="mobile-category"
-              name="category"
-              defaultValue={categorySlug ?? ""}
-            >
-              <option value="">All categories</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.slug}>
-                  {cat.name}
-                </option>
-              ))}
-            </Select>
+            {categories.length === 0 ? (
+              <p className="text-sm text-[var(--color-text-muted)]">
+                No categories yet. Categories appear here once defined (seed or
+                create).
+              </p>
+            ) : (
+              <Select
+                id="mobile-category"
+                name="category"
+                defaultValue={categorySlug ?? ""}
+              >
+                <option value="">All categories</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.slug}>
+                    {cat.name}
+                  </option>
+                ))}
+              </Select>
+            )}
           </div>
 
           <div>
@@ -100,14 +107,20 @@ export function ArticleFilters({
             >
               Tag
             </label>
-            <Select id="mobile-tag" name="tag" defaultValue={tagSlug ?? ""}>
-              <option value="">All tags</option>
-              {tags.map((tag) => (
-                <option key={tag.id} value={tag.slug}>
-                  {tag.name}
-                </option>
-              ))}
-            </Select>
+            {tags.length === 0 ? (
+              <p className="text-sm text-[var(--color-text-muted)]">
+                No tags available. Tags will appear when configured.
+              </p>
+            ) : (
+              <Select id="mobile-tag" name="tag" defaultValue={tagSlug ?? ""}>
+                <option value="">All tags</option>
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.slug}>
+                    {tag.name}
+                  </option>
+                ))}
+              </Select>
+            )}
           </div>
 
           <button
@@ -161,10 +174,14 @@ export function ArticleFilters({
             Categories
           </h2>
           {categories.length === 0 ? (
-            <p className="text-sm text-[var(--color-text-muted)]">
-              No categories yet. Categories appear here once defined (seed or
-              create).
-            </p>
+            <div className="space-y-1 text-sm">
+              <p className="font-medium text-[var(--color-text-secondary)]">
+                No categories yet
+              </p>
+              <p className="text-[var(--color-text-muted)]">
+                Categories appear here once defined (seed or create).
+              </p>
+            </div>
           ) : (
             <ul className="space-y-0.5">
               <li>
@@ -207,9 +224,14 @@ export function ArticleFilters({
             Tags
           </h2>
           {tags.length === 0 ? (
-            <p className="text-sm text-[var(--color-text-muted)]">
-              No tags available. Tags will appear when configured.
-            </p>
+            <div className="space-y-1 text-sm">
+              <p className="font-medium text-[var(--color-text-secondary)]">
+                No tags available
+              </p>
+              <p className="text-[var(--color-text-muted)]">
+                Tags will appear when configured.
+              </p>
+            </div>
           ) : (
             <ul className="space-y-0.5">
               <li>
