@@ -4,7 +4,7 @@ import type { ArticleListItem } from "@/lib/queries/articles";
 import { formatAbsoluteUpdated } from "@/lib/utils/dates";
 import { sanitizeHtml } from "@/lib/utils/sanitize";
 import { StatusBadge } from "@/components/articles/StatusBadge";
-import { Button } from "@/components/ui/Button";
+import { DeleteArticleButton } from "@/components/articles/DeleteArticleButton";
 
 type ArticleDetailProps = {
   article: ArticleListItem;
@@ -12,7 +12,6 @@ type ArticleDetailProps = {
 
 /**
  * Article detail view — design S3.
- * Delete is deferred to Iteration 3 (Server Actions).
  */
 export function ArticleDetail({ article }: ArticleDetailProps) {
   const categoryLabel = article.category?.name ?? "Uncategorized";
@@ -63,16 +62,10 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
             <Pencil className="size-4" aria-hidden />
             Edit
           </Link>
-          {/* Delete wired in Iteration 3 */}
-          <Button
-            type="button"
-            variant="danger-ghost"
-            disabled
-            title="Delete will be available when editing ships"
-            aria-label="Delete article (coming soon)"
-          >
-            Delete
-          </Button>
+          <DeleteArticleButton
+            articleId={article.id}
+            articleTitle={article.title}
+          />
         </div>
       </header>
 
