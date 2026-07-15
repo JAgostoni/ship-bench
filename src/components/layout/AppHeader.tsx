@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { SearchBox } from "@/components/search/SearchBox";
 
 /**
- * Sticky app header: wordmark, search placeholder, New article.
- * Search is non-functional until Iteration 5.
+ * Sticky app header: wordmark, SearchBox, New article.
  * Responsive: two rows below md (logo+New / search) — design §4.2.
  */
 export function AppHeader() {
@@ -30,20 +30,8 @@ export function AppHeader() {
         </div>
 
         {/* Row 2 (mobile): full-width search; centered max-w-md on md+ */}
-        <div className="min-w-0 flex-1 md:flex md:justify-center" role="search">
-          <label className="sr-only" htmlFor="header-search">
-            Search articles
-          </label>
-          <input
-            id="header-search"
-            type="search"
-            name="q"
-            placeholder="Search articles…"
-            disabled
-            title="Search will be available in a later iteration"
-            className="h-10 w-full max-w-md rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-subtle)] px-3 text-sm text-[var(--color-text-muted)] placeholder:text-[var(--color-text-muted)] opacity-80 md:mx-auto"
-            aria-disabled="true"
-          />
+        <div className="min-w-0 flex-1 md:flex md:justify-center">
+          <SearchBox />
         </div>
       </div>
     </header>

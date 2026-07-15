@@ -37,7 +37,7 @@ npm run dev
 # → http://localhost:3000
 ```
 
-After setup you should see the **Knowledge Base** shell (header wordmark, search placeholder, New article) and a browsable list of seeded articles. Sample data is visible in Prisma Studio (`npm run db:studio`).
+After setup you should see the **Knowledge Base** shell (header wordmark, live search typeahead, New article) and a browsable list of seeded articles. Try seed terms like `onboarding`, `deploy`, or `vacation` in the header search. Sample data is visible in Prisma Studio (`npm run db:studio`).
 
 **Categories & tags (v1):** Seed-only. There are no admin CRUD pages and no inline create-category/create-tag actions. Assign existing taxonomy on the article form; re-run `npm run db:seed` to reset sample categories/tags.
 
@@ -106,7 +106,7 @@ SQLite file paths in `DATABASE_URL` are resolved from the **project root** (e.g.
 | 2 Browse | Done |
 | 3 Edit | Done |
 | 4 Organize (categories/tags filters) | Done |
-| 5 Search | Pending |
+| 5 Search | Done |
 | 6 Verify / tests | Pending |
 
 See [`docs/backlog.md`](./docs/backlog.md) and iteration summaries under `docs/`.

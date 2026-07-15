@@ -97,3 +97,122 @@ export function toFtsQuery(raw: string): string {
   if (tokens.length === 0) return "";
   return tokens.map((t) => `${t}*`).join(" AND ");
 }
+
+/** Shared search hit DTO for API + SSR search page. */
+export type SearchResultItem = {
+  id: string;
+  slug: string;
+  title: string;
+  /** Plain excerpt from Article.excerpt (typeahead / fallback). */
+  excerpt: string;
+  /** FTS snippet with `<mark>` wrappers (full results page). */
+  snippet: string;
+  status: "PUBLISHED" | "DRAFT";
+  category: { name: string; slug: string } | null;
+};
+
+export type SearchArticlesResult = {
+  query: string;
+  results: SearchResultItem[];
+};
+
+type SearchArticlesOptions = {
+  query: string;
+  /** Default 10, max 20. */
+  limit?: number;
+};
+
+type FtsSearchRow = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  status: string;
+  categoryName: string | null;
+  categorySlug: string | null;
+  snippet: string;
+  rank: number;
+};
+
+/**
+ * Allow only text + `<mark>` / `</mark>` from FTS snippet output.
+ * Strips any other tags so snippets are safe for dangerouslySetInnerHTML.
+ */
+export function sanitizeFtsSnippet(html: string): string {
+  if (!html) return "";
+  // Escape any residual angle brackets that aren't mark tags, then restore marks
+  const withoutTags = html.replace(/<(?!\/?mark\b)[^>]*>/gi, "");
+  // Normalize mark tags to lowercase form
+  return withoutTags
+    .replace(/<\/?mark\b[^>]*>/gi, (tag) =>
+      tag.toLowerCase().startsWith("</") ? "</mark>" : "<mark>",
+    );
+}
+
+function clampLimit(limit: number | undefined): number {
+  const n = typeof limit === "number" && Number.isFinite(limit) ? limit : 10;
+  return Math.min(20, Math.max(1, Math.floor(n)));
+}
+
+/**
+ * Full-text search over published articles (title + content via FTS5).
+ * Drafts are never returned.
+ */
+export async function searchArticles(
+  options: SearchArticlesOptions,
+): Promise<SearchArticlesResult> {
+  const rawQuery = options.query ?? "";
+  const query = rawQuery.trim();
+  const limit = clampLimit(options.limit);
+  const ftsQuery = toFtsQuery(query);
+
+  if (!ftsQuery) {
+    return { query, results: [] };
+  }
+
+  try {
+    // snippet(column_index, start, end, ellipsis, tokens)
+    // FTS columns: 0=article_id, 1=title, 2=content
+    const rows = await prisma.$queryRawUnsafe<FtsSearchRow[]>(
+      `
+      SELECT
+        a.id AS id,
+        a.slug AS slug,
+        a.title AS title,
+        a.excerpt AS excerpt,
+        a.status AS status,
+        c.name AS categoryName,
+        c.slug AS categorySlug,
+        snippet(articles_fts, 2, '<mark>', '</mark>', '…', 12) AS snippet,
+        bm25(articles_fts) AS rank
+      FROM articles_fts
+      JOIN Article AS a ON a.id = articles_fts.article_id
+      LEFT JOIN Category AS c ON c.id = a.categoryId
+      WHERE articles_fts MATCH ?
+        AND a.status = 'PUBLISHED'
+      ORDER BY rank ASC
+      LIMIT ?
+      `,
+      ftsQuery,
+      limit,
+    );
+
+    const results: SearchResultItem[] = rows.map((row) => ({
+      id: row.id,
+      slug: row.slug,
+      title: row.title,
+      excerpt: row.excerpt ?? "",
+      snippet: sanitizeFtsSnippet(row.snippet ?? ""),
+      status: "PUBLISHED",
+      category:
+        row.categoryName && row.categorySlug
+          ? { name: row.categoryName, slug: row.categorySlug }
+          : null,
+    }));
+
+    return { query, results };
+  } catch (err) {
+    console.error("[fts] searchArticles failed:", err);
+    throw err;
+  }
+}

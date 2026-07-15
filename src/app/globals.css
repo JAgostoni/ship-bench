@@ -197,6 +197,14 @@ body {
   margin-bottom: 0.25em;
 }
 
+/* Search snippet marks — design §3.2 / §5.1 highlight token */
+.search-snippet mark {
+  background-color: var(--color-highlight);
+  color: inherit;
+  border-radius: var(--radius-sm);
+  padding: 0 0.125rem;
+}
+
 .prose-article a {
   color: var(--color-accent);
   text-decoration: underline;
