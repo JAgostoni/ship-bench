@@ -61,26 +61,30 @@ export function SearchBox() {
     [close, router],
   );
 
-  // Debounced fetch
+  const clearSearchResults = useCallback(() => {
+    abortRef.current?.abort();
+    setResults([]);
+    setError(null);
+    setLoading(false);
+    setHasSearched(false);
+    setOpen(false);
+    setActiveIndex(-1);
+  }, []);
+
+  // Debounced fetch — only schedule when query is non-empty; clear on input change
   useEffect(() => {
     const q = value.trim();
     if (q.length < 1) {
       abortRef.current?.abort();
-      setResults([]);
-      setError(null);
-      setLoading(false);
-      setHasSearched(false);
-      setOpen(false);
-      setActiveIndex(-1);
       return;
     }
 
-    setLoading(true);
-    setError(null);
     const handle = window.setTimeout(async () => {
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
+      setLoading(true);
+      setError(null);
 
       try {
         const res = await fetch(
@@ -202,7 +206,13 @@ export function SearchBox() {
           type="search"
           name="q"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            const next = e.target.value;
+            setValue(next);
+            if (next.trim().length < 1) {
+              clearSearchResults();
+            }
+          }}
           onFocus={() => {
             if (value.trim().length >= 1 && (hasSearched || loading || error)) {
               setOpen(true);

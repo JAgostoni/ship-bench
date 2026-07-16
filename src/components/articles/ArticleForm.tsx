@@ -175,7 +175,10 @@ export function ArticleForm({
         if (result && result.ok === false) {
           if (result.code === "CONFLICT") {
             setIsConflict(true);
-            setFormError(result.message);
+            // Design form.conflict — always show the canonical reload copy
+            setFormError(
+              "This article changed since you opened it. Reload to get the latest version.",
+            );
             return;
           }
           setFormError(result.message);
