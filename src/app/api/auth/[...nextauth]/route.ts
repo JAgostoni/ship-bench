@@ -28,5 +28,5 @@ export const authOptions = {
   pages: { signIn: '/login' },
 };
 
-export const GET = NextAuth(authOptions).GET;
-export const POST = NextAuth(authOptions).POST;
+export const GET = NextAuth(authOptions as any).GET;
+export const POST = NextAuth(authOptions as any).POST;

@@ -22,7 +22,8 @@
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
+      "react-markdown": ["src/types/react-markdown.d.ts"]
     },
     "plugins": [
       {

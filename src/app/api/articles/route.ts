@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions as any);
   if (!session) {
     return new NextResponse('Unauthenticated', { status: 401 });
   }

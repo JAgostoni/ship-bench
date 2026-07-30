@@ -12,8 +12,17 @@ model Article {
   title     String
   content   String
   status    String   @default("DRAFT")
+  tags      Tag[]    @relation("ArticleTags")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Status handled as string due to SQLite limitations
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  articles   Article[] @relation("ArticleTags")
 }
 
 // FTS5 virtual table for full-text search (created via migration)
