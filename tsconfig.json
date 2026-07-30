@@ -18,6 +18,7 @@
     "incremental": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": [
         "src/*"
@@ -27,7 +28,10 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "rootDir": ".",
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["jest"]
   },
   "include": [
     "next-env.d.ts",

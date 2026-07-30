@@ -11,6 +11,17 @@ model Article {
   id        String   @id @default(uuid())
   title     String
   content   String
+  status    String   @default("DRAFT")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// FTS5 virtual table for full-text search (created via migration)
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
