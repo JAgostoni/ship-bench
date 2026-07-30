@@ -1,20 +1,24 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useQuery } from '@tanstack/react-query';
-import { searchArticles } from '@/lib/search';
 
 interface SearchBoxProps {
   onResults: (articles: any[]) => void;
   onQueryChange?: (query: string) => void;
 }
 
-export default function SearchBox({ onResults }: SearchBoxProps) {
+export default function SearchBox({ onResults, onQueryChange }: SearchBoxProps) {
   const [input, setInput] = useState('');
   const debounced = useDebounce(input, 300);
 
+  // Use React Query to fetch from the search API endpoint
   const { data, refetch } = useQuery({
     queryKey: ['search', debounced],
-    queryFn: () => searchArticles(debounced),
+    queryFn: async () => {
+      const res = await fetch(`/api/search?query=${encodeURIComponent(debounced)}`);
+      const json = await res.json();
+      return json.results;
+    },
     enabled: false,
     staleTime: Infinity,
   });
@@ -34,8 +38,9 @@ export default function SearchBox({ onResults }: SearchBoxProps) {
   }, [data, onResults]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    if (onQueryChange) onQueryChange(e.target.value);
+    const val = e.target.value;
+    setInput(val);
+    if (onQueryChange) onQueryChange(val);
   };
 
   return (

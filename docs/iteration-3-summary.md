@@ -1,28 +1,31 @@
-# Iteration 3 Summary
+# Iteration 3 Summary
 
-**Built**:
-- SQLite FTS5 virtual table `article_fts` with triggers for sync.
-- `src/lib/search.ts` service exposing `searchArticles`.
-- API route `src/app/api/search/route.ts` (`GET /api/search?query=`).
-- Debounced `SearchBox` component using `useDebounce` hook.
-- Updated articles list page to fetch articles client‑side, integrate SearchBox, and highlight matches via `ArticleCard`.
-- Added `useDebounce` hook.
-- Unit test `tests/unit/search.test.ts` for search service.
-- Playwright E2E test `tests/e2e/search.spec.ts`.
-- Minor UI enhancements (data-test-id for testing, highlight markup).
+**What was built**
+- Added SQLite FTS5 virtual table `article_fts` and triggers (`article_ai`, `article_ad`, `article_au`) to keep it in sync with `Article`.
+- Implemented `src/lib/search.ts` using raw SQL with BM25 ranking (`bm25`).
+- Exposed GET `/api/search` endpoint (`src/app/api/search/route.ts`).
+- Created client‑side search UI (`SearchBox.tsx`) with 300 ms debounce and React‑Query v5.
+- Updated `ArticlesPage` (`src/app/articles/page.tsx`) to fetch articles client‑side, manage query state, and pass `query` to `ArticleCard`.
+- Updated `ArticleCard` (`src/components/ArticleCard.tsx`) to highlight matching terms and include `data-test-id="article-card"` for stable selectors.
+- Fixed Tailwind‑PostCSS conflict by installing `@tailwindcss/postcss` and updating `postcss.config.cjs`.
+- Added date serialization in `src/app/api/articles/route.ts` (ISO strings for `createdAt`/`updatedAt`).
+- Integrated `QueryClientProvider` in `src/app/layout.tsx` and added necessary `"use client"` directives.
+- Added unit test `tests/unit/search.test.ts` and Playwright e2e test `tests/e2e/search.spec.ts`; both now pass.
 
-**Assumptions**:
-- Search UI stays on the same page; no separate results page.
-- BM25 ranking used via `bm25()` function.
-- Query length >0 required; empty query returns empty results.
+**Assumptions / Issues**
+- e2e test uses a uniquely‑titled article to avoid false positives.
+- BM25 ranking is sufficient for relevance in this MVP.
+- React‑Query v5 requires object‑style query definitions.
+- Tailwind v4 needs a separate PostCSS plugin.
 
-**Verification**:
-- `npm run test` passes unit test.
-- `npx playwright test` passes E2E search test.
-- Application runs locally (`npm run dev`) and search bar returns filtered articles with highlighted terms.
+**Decisions log**
+- Placed `QueryClientProvider` at the top‑level layout for global access.
+- Added `"use client"` to any component receiving server‑side props.
+- Chose `data-test-id="article-card"` for reliable test selectors.
+- Serialized `Date` fields to ISO strings for JSON safety.
 
-**Decisions Log**:
-- Used raw `$queryRawUnsafe` with parameter placeholder for safety.
-- Chose 300 ms debounce as per spec.
-- Added `data-test-id` for reliable Playwright selectors.
-- Made `ArticleCard` accept optional `query` prop for highlighting.
+**Verification**
+- `npm run dev` starts the app without errors.
+- Searching via the UI returns filtered articles with highlighted terms.
+- `npm test` and `npm run test:e2e` both succeed.
+

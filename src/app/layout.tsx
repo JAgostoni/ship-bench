@@ -1,11 +1,8 @@
 "use client";
+"use client";
 import './globals.css';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Article App',
-  description: 'MVP article browsing and editing',
-};
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
