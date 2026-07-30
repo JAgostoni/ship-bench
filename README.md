@@ -9,6 +9,14 @@
 5. Start the dev server: `npm run dev` (or `npm run dev -- --port 3001`).
 
 ## Scripts
+- `npm run dev` – Start Next.js dev server.
+- `npm run build` – Build for production.
+- `npm run start` – Run production build.
+- `npm run lint` – Run ESLint.
+- `npm run format` – Run Prettier.
+- `npm test` – Run Jest unit tests.
+- `npm run test:e2e` – Run Playwright end‑to‑end tests.
+- `npm run ci` – Run full CI pipeline (lint, typecheck, unit, e2e).
 
 - `npm run dev` – Start Next.js dev server.
 - `npm run build` – Build for production.
