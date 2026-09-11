@@ -1,0 +1,207 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Manual (class-based) dark mode so next-themes can drive it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ── Surfaces ─────────────────────────────────────────────── */
+  --color-surface: oklch(0.995 0 0); /* #FDFDFD */
+  --color-surface-muted: oklch(0.972 0.004 250); /* #F4F6F8 */
+  --color-surface-sunken: oklch(0.955 0.005 250); /* #EEF0F3 */
+
+  /* ── Lines ────────────────────────────────────────────────── */
+  --color-border: oklch(0.905 0.006 250); /* #DDE0E3  decorative only */
+  --color-border-strong: oklch(0.64 0.018 250); /* #848D97  ≥3:1 — inputs, secondary buttons */
+  --color-divider: oklch(0.93 0.005 250); /* #E5E8EB */
+
+  /* ── Text ─────────────────────────────────────────────────── */
+  --color-ink: oklch(0.24 0.012 250); /* #1B2025  16.20:1 */
+  --color-ink-muted: oklch(0.5 0.014 250); /* #5D646B   5.90:1 */
+  --color-ink-subtle: oklch(0.58 0.014 250); /* #747B83   4.22:1  meta text ≥12px only */
+
+  /* ── Accent ───────────────────────────────────────────────── */
+  --color-accent: oklch(0.525 0.165 255); /* #0F69C6  button fill */
+  --color-accent-hover: oklch(0.47 0.16 255); /* #0058B1 */
+  --color-accent-soft: oklch(0.965 0.028 255); /* #E7F5FF  selected/active backgrounds */
+  --color-accent-ink: oklch(0.47 0.15 255); /* #0859AC  links, 6.82:1 */
+  --color-accent-ink-hover: oklch(0.42 0.15 255); /* #004A9C */
+  --color-accent-on: oklch(1 0 0); /* white text on --color-accent, 5.47:1 */
+
+  /* ── Semantic ─────────────────────────────────────────────── */
+  --color-success: oklch(0.5 0.12 152); /* #1A763F   5.59:1 */
+  --color-success-soft: oklch(0.96 0.028 152); /* #E5F8E9 */
+  --color-warning: oklch(0.5 0.115 70); /* #8C5500   6.06:1 */
+  --color-warning-soft: oklch(0.975 0.03 85); /* #FFF6E1 */
+  --color-danger: oklch(0.545 0.185 27); /* #C5312E   5.36:1 */
+  --color-danger-hover: oklch(0.495 0.185 27); /* #B01F1E */
+  --color-danger-soft: oklch(0.96 0.028 27); /* #FFEBE8 */
+  --color-danger-on: oklch(1 0 0); /* white     6.08:1 on danger */
+
+  /* ── Focus + selection ────────────────────────────────────── */
+  --color-ring: oklch(0.525 0.165 255); /* #0F69C6   5.39:1 */
+  --color-mark-bg: oklch(0.925 0.075 95); /* #F6E6AD   ink 13.22:1 */
+  --color-selection-bg: oklch(0.86 0.09 255); /* #A9D4FF   ink 10.63:1 */
+
+  /* ── Disabled ─────────────────────────────────────────────── */
+  --color-disabled-bg: oklch(0.955 0.005 250); /* #EEF0F3 */
+  --color-disabled-ink: oklch(0.62 0.012 250); /* #81878D   3.19:1 on disabled-bg */
+
+  /* ── Overlay ──────────────────────────────────────────────── */
+  --color-overlay: oklch(0 0 0 / 0.4);
+
+  /* ── Radius ───────────────────────────────────────────────── */
+  --radius-control: 0.375rem; /*  6px  inputs, buttons, chips  */
+  --radius-card: 0.75rem; /* 12px  cards, panels, dialogs  */
+  --radius-pill: 9999px; /*        badges                 */
+
+  /* ── Typography ───────────────────────────────────────────── */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --text-2xs: 0.6875rem; /* 11px  uppercase section labels only */
+  --text-xs: 0.75rem; /* 12px  meta, badges, hints */
+  --text-sm: 0.8125rem; /* 13px  field labels, table text */
+  --text-base: 0.875rem; /* 14px  UI body, buttons, list summaries */
+  --text-md: 1rem; /* 16px  ARTICLE BODY — the reading size */
+  --text-lg: 1.0625rem; /* 17px  card titles, section headings */
+  --text-xl: 1.25rem; /* 20px  h2 in article body */
+  --text-2xl: 1.5rem; /* 24px  page sub-titles */
+  --text-3xl: 2rem; /* 32px  page h1, article h1 */
+  --text-4xl: 2.5rem; /* 40px  reserved; landing only, unused in v1 */
+
+  --leading-tight: 1.25;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65; /* article body */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* ── Spacing (4px base) ───────────────────────────────────── */
+  --space-1: 0.25rem; /*  4px */
+  --space-2: 0.5rem; /*  8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  --layout-header-h: 3.5rem; /* 56px */
+  --layout-sidebar-w: 15rem; /* 240px */
+  --layout-toc-w: 12.5rem; /* 200px */
+  --layout-measure: 68ch; /* article reading measure */
+
+  /* ── Elevation (deliberately minimal) ─────────────────────── */
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.04);
+  --shadow-overlay: 0 8px 24px oklch(0 0 0 / 0.12);
+  --shadow-dialog: 0 16px 48px oklch(0 0 0 / 0.18);
+
+  /* ── Motion ───────────────────────────────────────────────── */
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.dark {
+  --color-surface: oklch(0.19 0.012 250); /* #101419 */
+  --color-surface-muted: oklch(0.24 0.013 250); /* #1B2025 */
+  --color-surface-sunken: oklch(0.165 0.012 250); /* #0A0F13 */
+
+  --color-border: oklch(0.32 0.014 250); /* #2E343A */
+  --color-border-strong: oklch(0.54 0.018 250); /* #677079  ≥3:1 */
+  --color-divider: oklch(0.28 0.012 250); /* #22272C */
+
+  --color-ink: oklch(0.965 0.005 250); /* #F1F4F7  16.68:1 */
+  --color-ink-muted: oklch(0.74 0.014 250); /* #A4ACB4   8.01:1 */
+  --color-ink-subtle: oklch(0.62 0.014 250); /* #80878E   5.08:1 */
+
+  --color-accent: oklch(0.565 0.17 255); /* #1C75D6  white text 4.61:1 */
+  --color-accent-hover: oklch(0.61 0.16 255); /* #3683E0 */
+  --color-accent-soft: oklch(0.29 0.045 255); /* #1C2C41 */
+  --color-accent-ink: oklch(0.8 0.115 255); /* #8AC1FF   9.80:1 */
+  --color-accent-ink-hover: oklch(0.86 0.1 255); /* #A5D4FF */
+  --color-accent-on: oklch(1 0 0);
+
+  --color-success: oklch(0.78 0.13 152); /* #72CF8E   9.70:1 */
+  --color-success-soft: oklch(0.29 0.04 152); /* #1B3121 */
+  --color-warning: oklch(0.82 0.14 85); /* #EEBC4A  10.49:1 */
+  --color-warning-soft: oklch(0.3 0.045 85); /* #382C11 */
+  --color-danger: oklch(0.55 0.19 27); /* #C9302D  white text 5.34:1 */
+  --color-danger-hover: oklch(0.58 0.19 27); /* #D33B36  white text 4.71:1 */
+  --color-danger-soft: oklch(0.29 0.045 27); /* #3F221F */
+  --color-danger-on: oklch(1 0 0);
+
+  --color-ring: oklch(0.72 0.13 255); /* #6AA7F4   7.44:1 */
+  --color-mark-bg: oklch(0.44 0.085 85); /* #684E0C   ink 7.07:1 */
+  --color-selection-bg: oklch(0.38 0.08 255); /* #23436C   ink 9.06:1 */
+
+  --color-disabled-bg: oklch(0.26 0.012 250); /* #212730 */
+  --color-disabled-ink: oklch(0.58 0.012 250); /* #757B81   3.63:1 on disabled-bg */
+
+  --color-overlay: oklch(0 0 0 / 0.6);
+
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-overlay: 0 8px 24px oklch(0 0 0 / 0.5);
+  --shadow-dialog: 0 16px 48px oklch(0 0 0 / 0.6);
+}
+
+/* Base */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  .dark {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-selection-bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* Article body reading measure + rhythm */
+  .prose {
+    max-width: var(--layout-measure);
+    font-size: var(--text-md);
+    line-height: var(--leading-relaxed);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

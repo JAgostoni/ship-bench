@@ -1,0 +1,1 @@
+CREATE INDEX `articles_title_idx` ON `articles` (`title` COLLATE NOCASE);
