@@ -10,20 +10,21 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      // Iteration 2 owns the pure-logic layer only, so `include` is scoped to
-      // `src/lib/**`. `src/server/**` returns to this list in iteration 3,
-      // together with its repository tests and the `'src/server/**'` glob
-      // threshold at the §11.1 integration target (≥85%).
-      include: ['src/lib/**'],
+      // §11.2's `include`, restored to its full scope now that iteration 3
+      // supplies the repository integration tests that cover `src/server/**`.
+      // `src/test/**` is deliberately absent: the harness and factories are
+      // test scaffolding, not application code.
+      include: ['src/lib/**', 'src/server/**'],
       thresholds: {
         // `architecture.md` §11.2 global entry, verbatim and at full strength.
         lines: 80,
         functions: 80,
         branches: 70,
         statements: 80,
-        // §11.1's unit-layer target for `src/lib/**` (≥90%), enforced as a glob
-        // so it keeps applying once iteration 3 widens `include`.
+        // §11.1's unit-layer target for `src/lib/**` (≥90%).
         'src/lib/**': { lines: 90, functions: 90, branches: 70, statements: 90 },
+        // §11.1's integration-layer target for `src/server/**` (≥85%).
+        'src/server/**': { lines: 85, functions: 85, branches: 70, statements: 85 },
       },
     },
     // Vitest 5 replaced `environmentMatchGlobs` (and the workspace file) with
@@ -35,7 +36,9 @@ export default defineConfig({
         test: {
           name: 'node',
           environment: 'node',
-          include: ['src/lib/**/*.test.ts', 'src/server/**/*.test.ts'],
+          // `src/test/**` holds the DB harness (db.ts) and its own spec, which
+          // must run alongside the repository tests that depend on it.
+          include: ['src/lib/**/*.test.ts', 'src/server/**/*.test.ts', 'src/test/**/*.test.ts'],
         },
       },
       {
