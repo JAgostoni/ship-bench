@@ -205,3 +205,36 @@
     }
   }
 }
+
+/* ── Motion ──────────────────────────────────────────────────────────────── */
+
+/* The header's indeterminate navigation progress bar (design-spec.md §2.1). */
+@keyframes kb-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@layer components {
+  /*
+   * Touch hit-area expansion (design-spec.md §6.4).
+   *
+   * The control keeps its authored size — 8px/6px of extra hit area is added with
+   * a pseudo-element rather than by visually enlarging the button, so the dense
+   * desktop layout is unaffected on a mouse pointer (`pointer: coarse` gate) and
+   * the 44×44 floor is met on touch.
+   *
+   * Adjacent targets are separated by ≥8px of layout gap, so a ±6px expansion can
+   * never overlap a neighbour.
+   */
+  @media (pointer: coarse) {
+    .kb-touch::after {
+      content: '';
+      position: absolute;
+      inset: -6px 0;
+    }
+  }
+}

@@ -320,6 +320,24 @@ export function createArticleRepository(db: Database) {
     },
 
     /**
+     * Published articles with no category — the sidebar's `Uncategorized` row
+     * count (`design-spec.md` §4.4 renders it only when ≥ 1 article qualifies).
+     *
+     * `categoryRepository.listWithCounts()` cannot answer this: it groups by
+     * `categories.id`, so a `NULL` category has no row to attach to. This lives
+     * on the article repository because it is an article count, not a category
+     * attribute.
+     */
+    countUncategorized(): number {
+      const row = db
+        .select({ value: sql<number>`count(*)` })
+        .from(articles)
+        .where(and(sql`${articles.categoryId} IS NULL`, eq(articles.status, 'published')))
+        .get();
+      return Number(row?.value ?? 0);
+    },
+
+    /**
      * `architecture.md` §8.7. The `articles_search_ai` trigger indexes the new
      * row — `article_search` is never written to directly.
      */

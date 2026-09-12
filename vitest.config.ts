@@ -38,7 +38,14 @@ export default defineConfig({
           environment: 'node',
           // `src/test/**` holds the DB harness (db.ts) and its own spec, which
           // must run alongside the repository tests that depend on it.
-          include: ['src/lib/**/*.test.ts', 'src/server/**/*.test.ts', 'src/test/**/*.test.ts'],
+          // `src/app/**` covers route handlers, which are Node code with no
+          // request-time Next.js API surface (iteration 4's `/api/health`).
+          include: [
+            'src/lib/**/*.test.ts',
+            'src/server/**/*.test.ts',
+            'src/test/**/*.test.ts',
+            'src/app/**/*.test.ts',
+          ],
         },
       },
       {
