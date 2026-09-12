@@ -1,4 +1,5 @@
 import { AppShell } from '@/components/layout/app-shell';
+import { FocusOnNavigate } from '@/components/layout/focus-on-navigate';
 import { Header } from '@/components/layout/header';
 import { Sidebar } from '@/components/layout/sidebar';
 import { articleRepository } from '@/server/repositories/articles';
@@ -13,6 +14,10 @@ import { categoryRepository } from '@/server/repositories/categories';
  * editor shell (iteration 6) is a sibling route group, which is how
  * design-spec.md §2.2's "no sidebar, no TOC, no search" focused shell is produced
  * without a conditional.
+ *
+ * `FocusOnNavigate` is mounted here for the same reason: it must run on every
+ * client-side navigation into the group and nowhere else, and a layout is the only
+ * place that observes all of them.
  */
 export async function AppLayout({ children }: { children: React.ReactNode }) {
   const appName = process.env.NEXT_PUBLIC_APP_NAME ?? 'Team Knowledge Base';
@@ -27,6 +32,7 @@ export async function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <AppShell header={<Header appName={appName} navigation={sidebar} />} sidebar={sidebar}>
+      <FocusOnNavigate />
       {children}
     </AppShell>
   );

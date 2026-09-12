@@ -162,6 +162,49 @@ describe('searchRepository', () => {
       expect(titles('capybaras', { limit: 3 })).toHaveLength(3);
       expect(titles('capybaras', { limit: 10 })).toHaveLength(6);
     });
+
+    // Added in iteration 5: `/search`'s URL contract includes `page`, so the route
+    // walks the ranked set by offset. These two cases are what make the pager's
+    // "Next" honest.
+    it('pages through the ranked set with offset', () => {
+      for (let i = 0; i < 5; i += 1) seed(`Capybara ${i}`, 'All about capybaras.');
+
+      const first = titles('capybaras', { limit: 2, offset: 0 });
+      const second = titles('capybaras', { limit: 2, offset: 2 });
+      const third = titles('capybaras', { limit: 2, offset: 4 });
+
+      expect(first).toHaveLength(2);
+      expect(second).toHaveLength(2);
+      expect(third).toHaveLength(1);
+      // No overlap between consecutive pages.
+      expect(new Set([...first, ...second]).size).toBe(4);
+    });
+
+    it('defaults the offset to 0, so every iteration-3 call site is unchanged', () => {
+      for (let i = 0; i < 3; i += 1) seed(`Capybara ${i}`, 'All about capybaras.');
+
+      expect(titles('capybaras', { limit: 2 })).toEqual(
+        titles('capybaras', { limit: 2, offset: 0 }),
+      );
+    });
+  });
+
+  describe('offset in the LIKE fallback', () => {
+    it('applies the offset on the degraded path too', () => {
+      for (let i = 0; i < 4; i += 1) seed(`Zebra ${i}`, 'Striped animals.');
+
+      // Drop the index so the query must degrade, then prove the fallback pages the
+      // same way — otherwise page 2 of a degraded search would repeat page 1.
+      handle.sqlite.exec('DROP TABLE article_search');
+
+      const first = titles('zebra', { limit: 2, offset: 0 });
+      const second = titles('zebra', { limit: 2, offset: 2 });
+
+      expect(first).toHaveLength(2);
+      expect(second).toHaveLength(2);
+      expect(new Set([...first, ...second]).size).toBe(4);
+      expect(warnings.length).toBeGreaterThan(0);
+    });
   });
 
   describe('invalid and empty input', () => {

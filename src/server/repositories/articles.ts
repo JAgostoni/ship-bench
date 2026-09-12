@@ -1,5 +1,5 @@
 import 'server-only';
-import { and, desc, eq, lt, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, lt, sql } from 'drizzle-orm';
 import { AppError } from '@/lib/errors';
 import { excerpt } from '@/lib/markdown';
 import { err, ok, type Result } from '@/lib/result';
@@ -16,6 +16,17 @@ export const REVISION_RETENTION = 20;
 
 /** Base slug for a title with nothing slug-worthy in it (`"???"`). */
 const FALLBACK_SLUG_BASE = 'article';
+
+/**
+ * The reserved `category` slug that selects articles with `category_id IS NULL`
+ * (design-spec.md §4.4, architecture.md §8.2: *"Uncategorized is a UI concept, not a
+ * row"*).
+ *
+ * It lives here, beside the SQL, because it is a query concern: `/categories/uncategorized`
+ * routes to the same list the sidebar's `Uncategorized` row counts, and only the
+ * repository may translate it into `IS NULL`.
+ */
+export const UNCATEGORIZED_CATEGORY = 'uncategorized';
 
 /** `editor_name` fallback, mirroring the `kb_display_name` cookie's default (§8.2). */
 const ANONYMOUS_EDITOR = 'Anonymous editor';
@@ -196,7 +207,14 @@ export function createArticleRepository(db: Database) {
   function filtersFor(q: ListQuery) {
     return [
       q.status === 'all' ? undefined : eq(articles.status, q.status),
-      q.category ? eq(categories.slug, q.category) : undefined,
+      // `category` is either a real slug, the reserved `uncategorized` sentinel, or
+      // absent. A `NULL` `category_id` has no `categories` row to join to, so it
+      // must be an `IS NULL` test rather than an equality — see design-spec.md §4.4.
+      q.category === UNCATEGORIZED_CATEGORY
+        ? sql`${articles.categoryId} IS NULL`
+        : q.category
+          ? eq(categories.slug, q.category)
+          : undefined,
     ].filter((clause) => clause !== undefined);
   }
 
@@ -249,8 +267,18 @@ export function createArticleRepository(db: Database) {
      * The §14.3 browse query. `.limit(pageSize + 1)` makes `hasNext` free; the
      * exact `total` is a second query, run only when `page > 1` so page 1 keeps
      * its single-query budget (§9.1, §13.1).
+     *
+     * `forceTotal` is iteration 5's addition for `GET /api/articles`, whose
+     * documented envelope carries a numeric `total` (§7.3). A server-rendered page
+     * can honestly show the visible count on page 1 (§4.1), but an API client
+     * cannot be handed `null` for a number the contract promises — so the route asks
+     * for the count explicitly instead of the page pretending it is unnecessary.
+     * Default `false` keeps the browse route's single-query path untouched.
      */
-    listArticles(q: ListQuery): ArticleListPage {
+    listArticles(
+      q: ListQuery,
+      { forceTotal = false }: { forceTotal?: boolean } = {},
+    ): ArticleListPage {
       const filters = filtersFor(q);
       const where = filters.length > 0 ? and(...filters) : undefined;
 
@@ -274,7 +302,7 @@ export function createArticleRepository(db: Database) {
       const items = rows.slice(0, q.pageSize).map((row) => toListItem(row as ArticleRow));
 
       let total: number | null = null;
-      if (q.page > 1) {
+      if (q.page > 1 || forceTotal) {
         const counted = db
           .select({ value: sql<number>`count(*)` })
           .from(articles)
@@ -317,6 +345,36 @@ export function createArticleRepository(db: Database) {
         .from(articles)
         .get();
       return Number(row?.value ?? 0);
+    },
+
+    /**
+     * Full list items for a set of ids, returned in the order the ids were given.
+     *
+     * Exists for `GET /api/articles?q=…`, which §7.3 documents as *"delegates to FTS5
+     * search instead of the list query"* but whose response is still the list
+     * envelope. Search ranks ids and knows nothing about `version`/`publishedAt`;
+     * this hydrates the ranked ids in one query so the documented item shape is
+     * real rather than a set of fabricated `null`s — and so the route never needs
+     * N+1 repository calls.
+     */
+    listByIds(ids: number[]): ArticleListItem[] {
+      if (ids.length === 0) return [];
+
+      const rows = db
+        .select(listColumns)
+        .from(articles)
+        .leftJoin(categories, eq(articles.categoryId, categories.id))
+        .where(inArray(articles.id, ids))
+        .all();
+
+      const items = rows.map((row) => toListItem(row as ArticleRow));
+      const byId = new Map(items.map((item) => [item.id, item]));
+      // SQLite returns rows in index order, not the order of the `IN` list, so the
+      // relevance ranking has to be re-applied here.
+      return ids.flatMap((id) => {
+        const item = byId.get(id);
+        return item ? [item] : [];
+      });
     },
 
     /**

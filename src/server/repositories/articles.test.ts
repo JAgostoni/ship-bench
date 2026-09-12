@@ -8,7 +8,7 @@ import { listQuerySchema } from '@/lib/validation/query';
 import { articleRevisions, articles, categories } from '@/server/db/schema';
 import { createTestDb } from '@/test/db';
 import { makeArticle, resetFactoryCounters } from '@/test/factories';
-import { REVISION_RETENTION, createArticleRepository } from './articles';
+import { REVISION_RETENTION, UNCATEGORIZED_CATEGORY, createArticleRepository } from './articles';
 import { createCategoryRepository } from './categories';
 
 type TestDb = ReturnType<typeof createTestDb>;
@@ -138,6 +138,67 @@ describe('articleRepository', () => {
       const page = repo.listArticles(query({ category: 'engineering' }));
 
       expect(page.items.map((a) => a.title)).toEqual(['In engineering']);
+    });
+
+    // Iteration 5.5: `/categories/uncategorized` is a real route, and a `NULL`
+    // `category_id` has no `categories` row to join to (architecture.md §8.2:
+    // "Uncategorized is a UI concept, not a row"), so the sentinel must be
+    // translated to `IS NULL` rather than treated as a slug.
+    it('treats the reserved `uncategorized` slug as category_id IS NULL', () => {
+      const engineering = categoryRepo.create({ name: 'Engineering' });
+      if (!isOk(engineering)) throw new Error('fixture setup failed');
+
+      seedArticle({ title: 'In engineering', categoryId: engineering.value.id });
+      seedArticle({ title: 'No category A', categoryId: null });
+      seedArticle({ title: 'No category B', categoryId: null });
+
+      const page = repo.listArticles(query({ category: UNCATEGORIZED_CATEGORY }));
+
+      expect(page.items.map((a) => a.title).sort()).toEqual(['No category A', 'No category B']);
+    });
+
+    it('does not treat a real category named after the sentinel as the sentinel', () => {
+      // The slug is reserved, so this can only arise from a direct insert; the
+      // assertion pins that the sentinel branch is keyed on the slug, not on the
+      // absence of a match.
+      const page = repo.listArticles(query({ category: UNCATEGORIZED_CATEGORY }));
+
+      expect(page.items).toEqual([]);
+    });
+  });
+
+  describe('listArticles — forced total (iteration 5.6)', () => {
+    it('computes the total on page 1 when forceTotal is set, for the JSON API envelope', () => {
+      for (let i = 0; i < 3; i += 1) seedArticle({ title: `API Article ${i}` });
+
+      const lazy = repo.listArticles(query());
+      const forced = repo.listArticles(query(), { forceTotal: true });
+
+      expect(lazy.total).toBeNull();
+      expect(forced.total).toBe(3);
+      expect(forced.items).toHaveLength(3);
+    });
+  });
+
+  describe('listByIds (iteration 5.6)', () => {
+    it('returns the requested rows in the order of the given ids', () => {
+      const a = seedArticle({ title: 'First' }).id;
+      const b = seedArticle({ title: 'Second' }).id;
+      const c = seedArticle({ title: 'Third' }).id;
+
+      const items = repo.listByIds([c, a, b]);
+
+      expect(items.map((item) => item.title)).toEqual(['Third', 'First', 'Second']);
+    });
+
+    it('skips ids that do not exist rather than returning holes', () => {
+      const a = seedArticle({ title: 'Only' }).id;
+
+      expect(repo.listByIds([a, 999_999]).map((item) => item.title)).toEqual(['Only']);
+    });
+
+    it('returns [] for an empty id list, without querying', () => {
+      expect(repo.listByIds([])).toEqual([]);
     });
   });
 

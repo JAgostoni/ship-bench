@@ -231,11 +231,19 @@ function check(label, ok) {
   await tabletPage.keyboard.press('Escape');
   await tabletPage.getByRole('dialog').waitFor({ state: 'detached', timeout: 5000 });
   check('834px: Escape closes the drawer', (await tabletPage.getByRole('dialog').count()) === 0);
-  check(
-    '834px: focus returns to the hamburger',
-    (await tabletPage.evaluate(() => document.activeElement?.getAttribute('aria-label'))) ===
-      'Open navigation',
-  );
+  // Radix restores focus on a later tick (iteration 4's summary records this same
+  // behaviour), and iteration 5 added stateful client components to the header, so
+  // that tick now follows an extra render. Wait for the focus rather than sampling
+  // immediately — the assertion is unchanged.
+  const focusReturned = await tabletPage
+    .waitForFunction(
+      () => document.activeElement?.getAttribute('aria-label') === 'Open navigation',
+      undefined,
+      { timeout: 3000 },
+    )
+    .then(() => true)
+    .catch(() => false);
+  check('834px: focus returns to the hamburger', focusReturned);
   check(
     '834px: "+ New article" stays a labelled button',
     await tabletPage

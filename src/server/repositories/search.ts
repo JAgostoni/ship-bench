@@ -87,7 +87,12 @@ export function createSearchRepository(
    * and matches are marked manually — the UI renders the same `SearchHit` shape
    * either way and never breaks because the FTS index is unavailable.
    */
-  function likeFallback(term: string, limit: number, status: SearchStatus): RawFallbackHit[] {
+  function likeFallback(
+    term: string,
+    limit: number,
+    status: SearchStatus,
+    offset: number,
+  ): RawFallbackHit[] {
     const pattern = `%${term.replace(/[\\%_]/g, (char) => `\\${char}`)}%`;
     const filters = [
       or(
@@ -116,6 +121,7 @@ export function createSearchRepository(
       .where(and(...filters))
       .orderBy(desc(articles.updatedAt))
       .limit(Math.min(limit, FALLBACK_LIMIT))
+      .offset(offset)
       .all();
   }
 
@@ -125,10 +131,15 @@ export function createSearchRepository(
      * weights title 8x, summary 3x, body 1x; `highlight` marks the title and
      * `snippet` the body with sentinels that `splitSegments` turns into
      * `{ text, match }[]`.
+     *
+     * `offset` was added in iteration 5: `/search`'s URL contract includes `page`
+     * (architecture.md §6.2) and design-spec.md §4.1 requires the pager to work on
+     * the ranked set, so the route needs to skip into the ranking. It is additive
+     * and defaults to 0, so every iteration-3 call site is unchanged.
      */
     searchArticles(
       q: string,
-      { limit = DEFAULT_SEARCH_LIMIT, status = 'published' as SearchStatus } = {},
+      { limit = DEFAULT_SEARCH_LIMIT, status = 'published' as SearchStatus, offset = 0 } = {},
     ): Result<SearchResults> {
       const ftsQuery = toFtsQuery(q);
 
@@ -160,6 +171,7 @@ export function createSearchRepository(
               AND (${status} = 'all' OR a.status = ${status})
             ORDER BY rank
             LIMIT ${limit}
+            OFFSET ${offset}
           `);
         } catch (error) {
           // A missing `article_search` (dropped/uninitialised) or a malformed
@@ -172,7 +184,7 @@ export function createSearchRepository(
       })();
 
       if (rows === null) {
-        const likeRows = likeFallback(q.trim(), limit, status);
+        const likeRows = likeFallback(q.trim(), limit, status, offset);
         return ok({
           query: q,
           total: null,

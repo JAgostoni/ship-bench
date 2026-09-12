@@ -6,7 +6,19 @@ import { StatusBadge } from './status-badge';
 export type ArticleCardProps = Pick<
   ArticleListItem,
   'title' | 'slug' | 'summary' | 'excerpt' | 'status' | 'category' | 'updatedAt'
->;
+> & {
+  /**
+   * Pre-rendered title / body line, used by search results so the row can carry
+   * `<mark>` highlights (design-spec.md §3.3 rule 3). Omitted on browse, where the
+   * plain `title`/`summary` strings render unchanged.
+   *
+   * This is what makes the search row *the same component* as the browse row
+   * rather than a lookalike copy: the 72px height, the inset focus ring, and the
+   * meta line exist in exactly one place.
+   */
+  titleNode?: React.ReactNode;
+  summaryNode?: React.ReactNode;
+};
 
 /**
  * design-spec.md §5.3, whose markup this follows closely because every class in
@@ -33,6 +45,8 @@ export function ArticleCard({
   status,
   category,
   updatedAt,
+  titleNode,
+  summaryNode,
 }: ArticleCardProps) {
   return (
     <Link
@@ -42,12 +56,12 @@ export function ArticleCard({
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
           <h3 className="text-ink group-hover:text-accent-ink min-w-0 truncate text-[17px] leading-snug font-semibold">
-            {title}
+            {titleNode ?? title}
           </h3>
           <StatusBadge status={status} />
         </div>
         <p className="text-ink-muted mt-1 line-clamp-2 text-[14px] leading-relaxed">
-          {summary ?? excerpt}
+          {summaryNode ?? summary ?? excerpt}
         </p>
         <p className="text-ink-subtle mt-1.5 flex flex-wrap items-center gap-1.5 text-[12px] leading-[1.4]">
           <span>{category?.name ?? 'Uncategorized'}</span>
