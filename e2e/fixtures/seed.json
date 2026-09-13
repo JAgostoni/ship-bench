@@ -1,5 +1,18 @@
 {
+  "_comment": "Generated file — do not edit by hand. Regenerate with `npm run db:fixture`.\n\nThe deterministic E2E dataset from architecture.md §9.7: 4 categories and 9\narticles (7 published, 2 draft) with fixed titles, slugs, and statuses. The\n`assertions` block records the properties the Playwright specs rely on:\n\n  - exactly 3 published articles match `deploy` (what search.spec.ts asserts)\n  - `deploying-the-api-to-production` is the top-ranked result for `deploy` (title weighting 8x)\n  - `deploying-the-api-to-production` has a fenced code block, a GFM table, and a task list\n  - `code-review-guidelines` has category_id: null (empty-states / category assertions)\n  - `deploying-the-api-to-production` has 2+ revisions (the history assertion in edit.spec.ts)",
   "generatedFrom": "src/server/db/seed.ts",
+  "assertions": {
+    "categories": 4,
+    "articles": 9,
+    "published": 7,
+    "drafts": 2,
+    "deployMatchCount": 3,
+    "topDeployResultSlug": "deploying-the-api-to-production",
+    "articleWithCodeTableAndTaskList": "deploying-the-api-to-production",
+    "uncategorizedSlug": "code-review-guidelines",
+    "emptyCategorySlug": null,
+    "articleWithTwoOrMoreRevisions": "deploying-the-api-to-production"
+  },
   "categories": [
     {
       "name": "Engineering",

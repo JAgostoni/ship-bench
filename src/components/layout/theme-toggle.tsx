@@ -76,7 +76,7 @@ export function ThemeToggle() {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="rounded-control text-ink-muted hover:bg-surface-muted hover:text-ink flex h-9 w-9 items-center justify-center"
+        className="rounded-control text-ink-muted hover:bg-surface-muted hover:text-ink kb-touch relative flex h-9 w-9 items-center justify-center"
       >
         <CurrentIcon className="h-4 w-4" aria-hidden="true" />
       </button>

@@ -76,7 +76,7 @@ export function Header({ appName, navigation, initialQuery = '' }: HeaderProps) 
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-10 lg:hidden"
+              className="relative h-10 w-10 lg:hidden"
               aria-label="Open navigation"
             >
               <Menu className="h-5 w-5" aria-hidden="true" />
@@ -102,7 +102,7 @@ export function Header({ appName, navigation, initialQuery = '' }: HeaderProps) 
         <Button
           variant="ghost"
           size="icon"
-          className="h-10 w-10 shrink-0 md:hidden"
+          className="relative h-10 w-10 shrink-0 md:hidden"
           aria-label="Search articles"
           aria-expanded={expanded}
           onClick={() => setExpanded((value) => !value)}

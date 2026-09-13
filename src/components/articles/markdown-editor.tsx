@@ -14,7 +14,7 @@ import {
   quote,
   unorderedListCommand,
 } from '@uiw/react-md-editor/commands';
-import { useEffect, useRef, useState } from 'react';
+import { cloneElement, isValidElement, useEffect, useRef, useState } from 'react';
 import { ArticleBody } from './article-body';
 import '@uiw/react-md-editor/nohighlight';
 
@@ -76,7 +76,41 @@ function labelled(command: ICommand, label: string, hint?: string): ICommand {
     ...command,
     // `kb-touch` gives the 32×32 button a 44px hit area on coarse pointers (§6.4).
     buttonProps: { 'aria-label': label, title: hint ?? label, className: 'kb-touch' },
+    /*
+     * The library's icons are `<svg role="img">` with **no accessible name**, which
+     * axe reports as `svg-img-alt` (serious) on the editor routes. The button already
+     * carries the name via `aria-label`, so the icon is purely decorative and must be
+     * hidden from the accessibility tree rather than given a duplicate label.
+     * `cloneElement` is how the override reaches the library's own element — the
+     * surrounding markup is intentionally left intact so command execution still works.
+     *
+     * The cast is required because `ICommand['icon']` is typed as a bare
+     * `React.ReactElement` (props `unknown`), so the clone's attributes cannot be
+     * checked against it.
+     */
+    icon: isValidElement(command.icon)
+      ? (cloneElement(command.icon as React.ReactElement<{ 'aria-hidden'?: string }>, {
+          'aria-hidden': 'true',
+        }) as ICommand['icon'])
+      : command.icon,
   };
+}
+
+/**
+ * The accessibility contract the editor toolbar's buttons must satisfy
+ * (design-spec.md E4, `architecture.md` §13.5). Every command is labelled by its
+ * button, and its icon is decorative.
+ */
+export function toolbarAccessibility(commands: ICommand[]): {
+  label: string | undefined;
+  iconHidden: boolean;
+}[] {
+  return commands.map((command) => ({
+    label: command.buttonProps?.['aria-label'] as string | undefined,
+    iconHidden:
+      isValidElement(command.icon) &&
+      (command.icon.props as { 'aria-hidden'?: string })['aria-hidden'] === 'true',
+  }));
 }
 
 /**
@@ -88,7 +122,7 @@ function labelled(command: ICommand, label: string, hint?: string): ICommand {
  * are not in §3.5's list, and the two preview toggles actively fight the `preview="live"`
  * layout the spec fixes. `extraCommands` is therefore set to `[]` in the component.
  */
-const TOOLBAR_COMMANDS: ICommand[] = [
+export const TOOLBAR_COMMANDS: ICommand[] = [
   labelled(bold, 'Bold', 'Bold (Ctrl/⌘+B)'),
   labelled(italic, 'Italic', 'Italic (Ctrl/⌘+I)'),
   labelled(heading2, 'Heading 2'),

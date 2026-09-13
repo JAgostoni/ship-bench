@@ -19,7 +19,11 @@ export type ArticleBodyProps = {
  * catch a regression here.
  *
  * The one addition to the spec's snippet is the `headingId` plugin below: the TOC
- * needs stable anchors, and Markdown headings have no `id` of their own.
+ * needs stable anchors, and Markdown headings have no `id` of their own. A second
+ * addition makes each fenced code block focusable, because a wide block scrolls
+ * horizontally and a scrollable region with no focusable content is flagged by axe
+ * (`scrollable-region-focusable`) — see `globals.css`'s `.prose pre` rule for the
+ * matching overflow style.
  *
  * **Plugin order matters.** `rehypeSanitize` runs **first**, then `headingId`.
  * Running the id assignment first would have it silently undone: the sanitizer's
@@ -52,6 +56,12 @@ type HastNode = {
  * heading it names. Duplicate headings get `-2`, `-3`, … from the shared
  * `uniqueId` helper in `toc-headings.ts`, which the TOC extractor uses too.
  *
+ * It also makes each fenced code block focusable. A `pre` that overflows
+ * horizontally is a scrollable region, and WCAG 2.1.1 / axe require it to be
+ * keyboard-operable; `tabIndex={0}` is the standard remedy. The `overflow-x` that
+ * creates the scroll is applied in `globals.css`, not here, so this plugin only
+ * adds the tab stop.
+ *
  * A plain function rather than a `unified` plugin factory: `rehypePlugins` accepts
  * a transformer directly, and this keeps the whole thing testable without pulling
  * in the plugin machinery.
@@ -71,6 +81,25 @@ function headingIdPlugin() {
           node.properties.id = uniqueId(slugifyHeading(text), used);
         }
       }
+
+      if (node.type === 'element' && node.tagName === 'pre') {
+        node.properties = { ...node.properties, tabIndex: 0 };
+      }
+
+      /*
+       * GFM task-list items render as `<input type="checkbox" disabled>`, and a
+       * disabled checkbox with no accessible name is flagged by axe's `label` rule
+       * (critical) — a screen reader announces an unnamed, dimmed checkbox. The
+       * item's own text sits beside it but is not programmatically associated, so
+       * each box gets an `aria-label` describing the state it shows.
+       */
+      if (node.type === 'element' && node.tagName === 'input') {
+        node.properties = {
+          ...node.properties,
+          'aria-label': node.properties?.checked ? 'Completed task' : 'Incomplete task',
+        };
+      }
+
       node.children?.forEach(visit);
     }
   };

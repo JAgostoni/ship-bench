@@ -84,6 +84,14 @@ export async function BrowseList({
         opacity because it is the live region announcing the *new* result set.
       */}
       <RefiningSurface className="mt-4">
+        {/*
+          §9.4 requires that no heading level be skipped. The list's `h1` is the page
+          title ("Articles"), and the card titles are `h3`, so the list itself is
+          rendered as an `sr-only` `h2` ("Articles") to keep the outline
+          `h1 → h2 → h3` on every browse-shaped route (`/`, `/search`,
+          `/categories/[slug]`).
+        */}
+        <h2 className="sr-only">Articles</h2>
         <ArticleList
           items={items}
           emptyState={{

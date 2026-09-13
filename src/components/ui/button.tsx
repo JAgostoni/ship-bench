@@ -14,6 +14,10 @@ const buttonVariants = cva(
     'rounded-control font-medium whitespace-nowrap',
     'transition-[background-color,color,border-color] duration-[120ms]',
     'disabled:pointer-events-none disabled:bg-disabled-bg disabled:text-disabled-ink',
+    // design-spec.md §6.4: the 44px touch floor is met with a pseudo-element hit
+    // area, not by visually enlarging controls. Applying it to the shared base gives
+    // every button the treatment on coarse pointers; `relative` anchors the `::after`.
+    'relative kb-touch',
   ].join(' '),
   {
     variants: {

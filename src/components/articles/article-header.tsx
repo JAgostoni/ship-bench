@@ -118,7 +118,7 @@ export function ArticleHeader({ article, actions }: ArticleHeaderProps) {
 /** The `Archive article` menu item, exported so iteration 6 can mount it in a real menu. */
 export function ArchiveMenuItem() {
   return (
-    <span className="text-danger inline-flex items-center gap-2">
+    <span className="text-danger-ink inline-flex items-center gap-2">
       <Archive className="h-4 w-4" aria-hidden="true" />
       Archive article
     </span>

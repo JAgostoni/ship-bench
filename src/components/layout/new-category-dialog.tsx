@@ -96,7 +96,7 @@ export function NewCategoryDialog({ trigger }: { trigger: React.ReactNode }) {
             </div>
 
             {formLevelError ? (
-              <p role="alert" className="text-danger mt-3 text-[12px]">
+              <p role="alert" className="text-danger-ink mt-3 text-[12px]">
                 {formLevelError}
               </p>
             ) : null}

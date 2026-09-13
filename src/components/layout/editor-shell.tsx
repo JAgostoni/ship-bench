@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
+import { Footer } from './footer';
 import { EditorBridgeContext, type EditorBridge, type EditorPillStatus } from './editor-bridge';
 import { EditorStatusStrip } from './editor-status-strip';
 /**
@@ -73,6 +74,13 @@ export function EditorShell({
         <main id="main" tabIndex={-1} className="min-w-0 flex-1">
           {children}
         </main>
+
+        {/*
+          design-spec.md §9.4 requires exactly one `contentinfo`. The focused shell
+          omits the sidebar and the header search, but the footer is not chrome — it
+          keeps the landmark contract identical on every route.
+        */}
+        <Footer />
       </div>
     </EditorBridgeContext.Provider>
   );

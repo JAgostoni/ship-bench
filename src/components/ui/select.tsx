@@ -20,7 +20,7 @@ export function SelectTrigger({
   return (
     <SelectPrimitive.Trigger
       className={cn(
-        'rounded-control border-border-strong bg-surface text-ink flex h-9 w-full items-center justify-between gap-2 border px-3 text-[14px]',
+        'rounded-control kb-touch border-border-strong bg-surface text-ink relative flex h-9 w-full items-center justify-between gap-2 border px-3 text-[14px]',
         'hover:border-ink-muted',
         'focus-visible:border-accent focus-visible:outline-none',
         'disabled:bg-disabled-bg disabled:text-disabled-ink disabled:cursor-not-allowed',

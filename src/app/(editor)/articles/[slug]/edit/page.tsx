@@ -43,6 +43,12 @@ export default async function EditArticlePage({ params }: EditParams) {
   return (
     <EditorShell title={`Edit: ${article.title}`} formId="article-form" saveLabel="Save changes">
       <div className="mx-auto w-full max-w-[1100px] px-4 py-6 md:px-6">
+        {/*
+          The editor's `h1` (design-spec.md §2.1: exactly one per page, in the content
+          column, never in the header). The status strip already shows the title
+          visually, so this heading is `sr-only` rather than duplicating it.
+        */}
+        <h1 className="sr-only">Edit: {article.title}</h1>
         <ArticleForm mode="edit" categories={categories} article={article} />
       </div>
     </EditorShell>

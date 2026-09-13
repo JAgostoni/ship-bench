@@ -83,7 +83,7 @@ export function ArchiveArticleButton({ article }: ArchiveArticleButtonProps) {
                 type="button"
                 role="menuitem"
                 onClick={() => setMenuOpen(false)}
-                className="rounded-control text-danger hover:bg-danger-soft flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px]"
+                className="rounded-control text-danger-ink hover:bg-danger-soft flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px]"
               >
                 Archive article
               </button>
@@ -118,7 +118,7 @@ export function ArchiveArticleButton({ article }: ArchiveArticleButtonProps) {
         </form>
 
         {error ? (
-          <p role="alert" className="text-danger mt-3 text-[12px]">
+          <p role="alert" className="text-danger-ink mt-3 text-[12px]">
             {error}
           </p>
         ) : null}

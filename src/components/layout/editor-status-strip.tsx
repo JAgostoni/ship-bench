@@ -62,7 +62,7 @@ export function EditorStatusStrip({
           status === 'dirty'
             ? 'bg-warning-soft text-warning rounded-pill hidden shrink-0 items-center gap-1.5 px-2 py-0.5 text-[13px] font-medium sm:inline-flex'
             : status === 'failed'
-              ? 'text-danger hidden shrink-0 text-[13px] font-medium sm:inline'
+              ? 'text-danger-ink hidden shrink-0 text-[13px] font-medium sm:inline'
               : 'text-ink-subtle hidden shrink-0 text-[13px] sm:inline'
         }
       >

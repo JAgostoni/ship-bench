@@ -76,7 +76,7 @@ export function Field({
       <Label htmlFor={htmlFor}>
         {label}
         {required ? (
-          <span aria-hidden="true" className="text-danger ml-0.5">
+          <span aria-hidden="true" className="text-danger-ink ml-0.5">
             *
           </span>
         ) : null}
@@ -91,7 +91,7 @@ export function Field({
         <p
           id={errorId}
           role="alert"
-          className="text-danger flex items-start gap-1 text-[12px] leading-[1.4] font-medium"
+          className="text-danger-ink flex items-start gap-1 text-[12px] leading-[1.4] font-medium"
         >
           <AlertCircle className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           <span>{error}</span>

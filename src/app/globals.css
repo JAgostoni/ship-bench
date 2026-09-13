@@ -36,7 +36,8 @@
   --color-danger: oklch(0.545 0.185 27); /* #C5312E   5.36:1 */
   --color-danger-hover: oklch(0.495 0.185 27); /* #B01F1E */
   --color-danger-soft: oklch(0.96 0.028 27); /* #FFEBE8 */
-  --color-danger-on: oklch(1 0 0); /* white     6.08:1 on danger */
+  --color-danger-on: oklch(1 0 0); /* white     5.44:1 on danger */
+  --color-danger-ink: oklch(0.545 0.185 27); /* #C5312E  danger TEXT, 5.36:1 on surface */
 
   /* ── Focus + selection ────────────────────────────────────── */
   --color-ring: oklch(0.525 0.165 255); /* #0F69C6   5.39:1 */
@@ -140,6 +141,13 @@
   --color-danger-hover: oklch(0.58 0.19 27); /* #D33B36  white text 4.71:1 */
   --color-danger-soft: oklch(0.29 0.045 27); /* #3F221F */
   --color-danger-on: oklch(1 0 0);
+  /*
+   * `--color-danger` above is a *fill* token (white text sits on it). A red light
+   * enough for white-on-fill cannot also be dark enough to read as text on a dark
+   * surface — the same conflict UX16 resolves for the accent. `--color-danger-ink`
+   * is the text half: 6.41:1 on `--surface`, 5.85:1 on `--danger-soft`, both ≥4.5:1.
+   */
+  --color-danger-ink: oklch(0.74 0.15 27); /* #F08A85  danger TEXT, 6.41:1 on surface */
 
   --color-ring: oklch(0.72 0.13 255); /* #6AA7F4   7.44:1 */
   --color-mark-bg: oklch(0.44 0.085 85); /* #684E0C   ink 7.07:1 */
@@ -192,6 +200,24 @@
     max-width: var(--layout-measure);
     font-size: var(--text-md);
     line-height: var(--leading-relaxed);
+  }
+
+  /*
+   * A wide code block is the one place the reading measure can overflow
+   * horizontally, which makes it a scrollable region. WCAG 2.1.1 requires that
+   * region to be reachable and operable by keyboard, and axe flags a scrollable
+   * region with no focusable content (`scrollable-region-focusable`, serious).
+   * Making the `pre` itself focusable is the fix the rule expects; it does not
+   * change the tab order of any other element.
+   */
+  .prose pre {
+    overflow-x: auto;
+    tab-size: 2;
+  }
+
+  .prose pre:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {

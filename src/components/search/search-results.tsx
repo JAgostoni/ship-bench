@@ -74,22 +74,26 @@ export function SearchResults({
         {shown === 0 ? (
           <NoResultsState query={query} />
         ) : (
-          <div className="border-border rounded-card overflow-hidden border [&>*:last-child]:border-b-0">
-            {hits.map((hit) => (
-              <ArticleCard
-                key={hit.id}
-                title={hit.title}
-                slug={hit.slug}
-                summary={null}
-                excerpt=""
-                status={hit.status}
-                category={hit.category}
-                updatedAt={hit.updatedAt}
-                titleNode={<Highlight segments={hit.titleSegments} />}
-                summaryNode={<Highlight segments={hit.snippetSegments} />}
-              />
-            ))}
-          </div>
+          <>
+            {/* §9.4: keep the outline `h1 → h2 → h3` — the card titles are `h3`. */}
+            <h2 className="sr-only">Results</h2>
+            <div className="border-border rounded-card overflow-hidden border [&>*:last-child]:border-b-0">
+              {hits.map((hit) => (
+                <ArticleCard
+                  key={hit.id}
+                  title={hit.title}
+                  slug={hit.slug}
+                  summary={null}
+                  excerpt=""
+                  status={hit.status}
+                  category={hit.category}
+                  updatedAt={hit.updatedAt}
+                  titleNode={<Highlight segments={hit.titleSegments} />}
+                  summaryNode={<Highlight segments={hit.snippetSegments} />}
+                />
+              ))}
+            </div>
+          </>
         )}
       </RefiningSurface>
 

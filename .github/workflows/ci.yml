@@ -17,6 +17,12 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm run test:run -- --coverage
+      # Fails the build on a high or critical advisory (architecture.md §13.2 lists
+      # dependency vulnerabilities as a threat with this mitigation). Moderate and
+      # below are reported but do not gate, and `npm audit --omit=dev` is
+      # deliberately not used: the advisories that matter here are in the build
+      # toolchain (drizzle-kit's esbuild), which never ships to a runtime.
+      - run: npm audit --audit-level=high
       - run: npm run build
         env:
           DATABASE_FILE: ./data/kb.ci.db
@@ -24,6 +30,9 @@ jobs:
         env:
           DATABASE_FILE: ./data/kb.ci.db
       - run: npx playwright install --with-deps chromium webkit
+      # The E2E gate. `playwright.config.ts` starts and tears down its own dev server
+      # on the separate `./data/kb.e2e.db`, so nothing here points at `kb.ci.db` and
+      # the developer's `kb.db` is never involved (§9.7).
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}

@@ -133,7 +133,7 @@ export function EditingAsChip({ initialName, className }: EditingAsChipProps) {
             </Field>
 
             {state.status === 'error' && !state.fieldErrors ? (
-              <p role="alert" className="text-danger mt-2 text-[12px]">
+              <p role="alert" className="text-danger-ink mt-2 text-[12px]">
                 {state.message}
               </p>
             ) : null}

@@ -32,6 +32,26 @@ describe('ArticleBody', () => {
     expect(checkboxes[1]).not.toBeChecked();
   });
 
+  it('gives a task-list checkbox an accessible name, since a disabled input has none', () => {
+    render(<ArticleBody markdown={'- [x] Confirm CI is green\n- [ ] Announce the window'} />);
+
+    // GFM renders these as `<input type="checkbox" disabled>`. Without a label axe
+    // reports `label` (critical), because a disabled control is still in the
+    // accessibility tree and announces as an unnamed checkbox.
+    expect(screen.getByRole('checkbox', { name: 'Completed task' })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: 'Incomplete task' })).not.toBeChecked();
+  });
+
+  it('makes a fenced code block focusable, so its horizontal scroll is keyboard-reachable', () => {
+    const { container } = render(<ArticleBody markdown={'```bash\nnpm run verify\n```'} />);
+
+    // A wide `pre` overflows and scrolls; axe's `scrollable-region-focusable` (serious)
+    // requires that region to be keyboard operable.
+    const pre = container.querySelector('pre');
+    expect(pre).not.toBeNull();
+    expect(pre).toHaveAttribute('tabindex', '0');
+  });
+
   it('does not parse raw HTML, so an embedded script never reaches the DOM', () => {
     const { container } = render(
       <ArticleBody markdown={'Before\n\n<script>alert(1)</script>\n\nAfter'} />,

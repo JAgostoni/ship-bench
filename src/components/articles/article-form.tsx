@@ -135,7 +135,7 @@ function StatusPill({ state, isDirty }: { state: 'saving' | 'failed' | 'idle'; i
   }
 
   if (state === 'failed') {
-    return <span className="text-danger text-[13px] font-medium">Save failed</span>;
+    return <span className="text-danger-ink text-[13px] font-medium">Save failed</span>;
   }
 
   if (isDirty) {
@@ -427,7 +427,7 @@ export function ArticleForm({
           role="alert"
           className="rounded-card border-danger/40 bg-danger-soft flex items-start gap-3 border p-4"
         >
-          <AlertTriangle className="text-danger mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+          <AlertTriangle className="text-danger-ink mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
           <div className="min-w-0 flex-1">
             <p className="text-ink text-[14px]">{formError}</p>
             {/*
@@ -532,7 +532,7 @@ export function ArticleForm({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="text-ink text-[13px] leading-[1.4] font-medium">
             Body
-            <span aria-hidden="true" className="text-danger ml-0.5">
+            <span aria-hidden="true" className="text-danger-ink ml-0.5">
               *
             </span>
           </span>
@@ -579,7 +579,9 @@ export function ArticleForm({
         <p
           id="bodyMd-hint"
           className={
-            bodyTooLarge ? 'text-danger text-[12px]' : 'text-ink-subtle text-[12px] leading-[1.4]'
+            bodyTooLarge
+              ? 'text-danger-ink text-[12px]'
+              : 'text-ink-subtle text-[12px] leading-[1.4]'
           }
         >
           {bodyHint}
@@ -588,7 +590,7 @@ export function ArticleForm({
           <p
             className={
               bodyTooLarge
-                ? 'text-danger text-right text-[12px] tabular-nums'
+                ? 'text-danger-ink text-right text-[12px] tabular-nums'
                 : 'text-warning text-right text-[12px] tabular-nums'
             }
           >
@@ -596,7 +598,7 @@ export function ArticleForm({
           </p>
         ) : null}
         {bodyError ? (
-          <p role="alert" className="text-danger text-[12px]">
+          <p role="alert" className="text-danger-ink text-[12px]">
             {bodyError}
           </p>
         ) : null}

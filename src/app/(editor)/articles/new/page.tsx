@@ -34,6 +34,11 @@ export default async function NewArticlePage({ searchParams }: NewArticleParams)
   return (
     <EditorShell title="New article" formId="article-form" saveLabel="Save article">
       <div className="mx-auto w-full max-w-[1100px] px-4 py-6 md:px-6">
+        {/*
+          The editor's `h1` (design-spec.md §2.1). `sr-only` because the status strip
+          already shows "New article" as the visible title.
+        */}
+        <h1 className="sr-only">New article</h1>
         <ArticleForm mode="create" categories={categories} initialCategoryId={initialCategoryId} />
       </div>
     </EditorShell>
