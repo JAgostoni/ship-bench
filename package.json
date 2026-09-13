@@ -20,6 +20,7 @@
     "db:setup": "npm run db:migrate && npm run db:seed",
     "db:reset": "tsx scripts/db-setup.ts --fresh --seed",
     "db:reindex": "tsx scripts/db-setup.ts --reindex",
+    "db:fixture": "tsx scripts/export-fixture.ts",
     "db:check": "tsx scripts/db-setup.ts --check",
     "db:backup": "tsx scripts/backup.ts",
     "db:studio": "drizzle-kit studio",

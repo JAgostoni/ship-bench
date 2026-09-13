@@ -218,6 +218,18 @@
   }
 }
 
+/* The toast slide-up (design-spec.md §5.8, 180ms). */
+@keyframes kb-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer components {
   /*
    * Touch hit-area expansion (design-spec.md §6.4).
@@ -236,5 +248,157 @@
       position: absolute;
       inset: -6px 0;
     }
+  }
+}
+
+/* ── Markdown editor overrides (design-spec.md §3.5) ─────────────────────────
+ *
+ * Deliberately **outside** every `@layer`. Tailwind v4 declares its layers up
+ * front, and unlayered CSS always outranks layered CSS regardless of specificity —
+ * `@uiw/react-md-editor`'s stylesheet and `@uiw/react-markdown-preview`'s are both
+ * unlayered, so a rule inside `@layer components` would lose to them no matter how
+ * specific it was.
+ *
+ * The library's markup is kept (its command execution depends on it); only its
+ * GitHub-flavoured chrome is replaced with this app's tokens. Variable names are
+ * the ones the library's own CSS reads (`--color-fg-default`,
+ * `--md-editor-background-color`, …), mapped onto `globals.css` tokens so the
+ * editor is correct in both themes without a second palette.
+ */
+.kb-editor {
+  --color-fg-default: var(--color-ink);
+  --color-canvas-default: var(--color-surface);
+  --color-border-default: var(--color-border);
+  --color-neutral-muted: var(--color-surface-sunken);
+  --color-accent-fg: var(--color-accent-ink);
+  --color-danger-fg: var(--color-danger);
+  --md-editor-font-family: var(--font-sans);
+  --md-editor-background-color: var(--color-surface);
+  --md-editor-box-shadow-color: var(--color-border);
+}
+
+.kb-editor .w-md-editor {
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-card);
+  box-shadow: none;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  padding-bottom: 0;
+}
+
+/* The toolbar is the editor's only persistent chrome, so it stays put. */
+.kb-editor .w-md-editor-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background-color: var(--color-surface);
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.kb-editor .w-md-editor-toolbar ul {
+  display: flex;
+  flex-wrap: inherit;
+  align-items: center;
+  gap: 4px;
+}
+
+.kb-editor .w-md-editor-toolbar li {
+  display: block;
+  font-size: 14px;
+}
+
+/* E4: 32×32, 4px gap, `--surface-sunken` when active. */
+.kb-editor .w-md-editor-toolbar li > button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.kb-editor .w-md-editor-toolbar li > button:hover {
+  background-color: var(--color-surface-muted);
+  color: var(--color-ink);
+}
+
+.kb-editor .w-md-editor-toolbar li > button.active,
+.kb-editor .w-md-editor-toolbar li.active > button {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-ink);
+}
+
+.kb-editor .w-md-editor-toolbar li > button svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* The H2/H3 commands render text rather than an icon. */
+.kb-editor .w-md-editor-toolbar li > button > div {
+  font-size: 12px !important;
+  line-height: 1 !important;
+  text-align: center;
+}
+
+.kb-editor .w-md-editor-content {
+  background-color: var(--color-surface);
+}
+
+.kb-editor .w-md-editor-input {
+  border-right: 1px solid var(--color-border);
+}
+
+.kb-editor .w-md-editor-text-input,
+.kb-editor .w-md-editor-text-pre {
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  line-height: 1.65 !important;
+  padding: 12px 14px !important;
+  color: var(--color-ink) !important;
+}
+
+.kb-editor .w-md-editor-text-input {
+  -webkit-text-fill-color: currentColor;
+  caret-color: var(--color-ink);
+}
+
+/* The preview pane scrolls on its own — no scroll sync (UX21). */
+.kb-editor .w-md-editor-preview {
+  box-shadow: none;
+  padding: 12px 16px;
+  background-color: var(--color-surface);
+}
+
+.kb-editor .w-md-editor-preview .prose {
+  max-width: none;
+}
+
+/*
+ * §3.5's narrow-width rules. Below 480px the toolbar scrolls horizontally instead
+ * of wrapping onto a second and third row, which would leave the editor a strip.
+ */
+@media (max-width: 479px) {
+  .kb-editor .w-md-editor-toolbar,
+  .kb-editor .w-md-editor-toolbar ul {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .kb-editor .w-md-editor-toolbar::-webkit-scrollbar {
+    display: none;
   }
 }

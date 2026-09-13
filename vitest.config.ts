@@ -1,9 +1,20 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [tsconfigPaths(), react()],
+  resolve: {
+    alias: {
+      // `server-only` throws unless resolved under the `react-server` export condition,
+      // which Vite does not set. An alias replaces the specifier in every project and at
+      // every import depth, which a `vi.mock` cannot do: the mock only applies to
+      // modules Vite could already resolve, so a deep import chain would still fail at
+      // transform time. See `src/test/server-only-stub.ts` and architecture.md §11.2.
+      'server-only': fileURLToPath(new URL('./src/test/server-only-stub.ts', import.meta.url)),
+    },
+  },
   test: {
     globals: true,
     setupFiles: ['./src/test/setup.ts'],

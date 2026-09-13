@@ -1,6 +1,6 @@
 import { cn } from '@/lib/cn';
 
-export type TextareaProps = React.ComponentPropsWithoutRef<'textarea'>;
+export type TextareaProps = React.ComponentPropsWithRef<'textarea'>;
 
 /** Same treatment as `Input` (design-spec.md §5.1), resizable vertically only. */
 export function Textarea({ className, ...props }: TextareaProps) {

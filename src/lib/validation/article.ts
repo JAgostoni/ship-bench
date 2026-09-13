@@ -29,3 +29,24 @@ export const articleUpdateSchema = articleCreateSchema.extend({
   changeNote: z.string().trim().max(200).optional(),
 });
 export type ArticleUpdateInput = z.infer<typeof articleUpdateSchema>;
+
+/**
+ * The **client form's** schema: everything a create collects, plus the edit-only change
+ * note, and *without* `version`.
+ *
+ * **Why it exists.** `version` is not a value the user edits — it is the
+ * optimistic-concurrency token, supplied by a hidden field that only the edit route
+ * renders. And the change note cannot be folded into `articleCreateSchema`, because a
+ * create genuinely has no prior state to describe (E3).
+ *
+ * The form matters for a non-obvious reason: `zodResolver` **replaces** the submitted
+ * values with the schema's *output*, so any field the schema does not declare is dropped
+ * before the form ever sees it. Running the create schema on the edit route would
+ * therefore silently discard the change note — the revision would be written with a
+ * `null` note even though the author typed one. Declaring the field here is what keeps it
+ * in the payload.
+ */
+export const articleFormSchema = articleCreateSchema.extend({
+  changeNote: z.string().trim().max(200, 'Change note must be 200 characters or fewer.').optional(),
+});
+export type ArticleFormInput = z.infer<typeof articleFormSchema>;

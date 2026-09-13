@@ -20,7 +20,15 @@ type SeedArticle = {
   revisions?: number;
 };
 
-const SEED_CATEGORIES: SeedCategory[] = [
+/**
+ * The deterministic dataset, exported so the same four categories and nine articles
+ * back three consumers: `npm run db:seed`, `POST /api/test/reset` (via
+ * `e2e/fixtures/seed.json`, generated from these arrays by `scripts/export-fixture.ts`),
+ * and the Playwright suite's exact-string assertions. `architecture.md` §9.7 requires
+ * fixed titles and slugs; a second hand-maintained copy would be the first thing to
+ * drift.
+ */
+export const SEED_CATEGORIES: SeedCategory[] = [
   {
     name: 'Engineering',
     slug: 'engineering',
@@ -43,7 +51,7 @@ const SEED_CATEGORIES: SeedCategory[] = [
   },
 ];
 
-const SEED_ARTICLES: SeedArticle[] = [
+export const SEED_ARTICLES: SeedArticle[] = [
   {
     slug: 'deploying-the-api-to-production',
     title: 'Deploying the API to Production',
@@ -403,6 +411,8 @@ becomes the constraint.
 - Who owns the migration?`,
   },
 ];
+
+export type { SeedArticle, SeedCategory };
 
 const EDITORS = ['Ada Lovelace', 'Grace Hopper', 'Alan Turing', 'Anonymous editor'];
 

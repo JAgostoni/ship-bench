@@ -1,11 +1,15 @@
 import { cn } from '@/lib/cn';
 
-export type InputProps = React.ComponentPropsWithoutRef<'input'>;
+export type InputProps = React.ComponentPropsWithRef<'input'>;
 
 /**
  * design-spec.md §7.1's input states: default, hover, focus-visible, filled,
  * placeholder, error (`--danger` border + `aria-invalid`, set by `Field`), and
  * disabled. 36px tall so it lines up with `Button size="md"`.
+ *
+ * `ComponentPropsWithRef` (rather than `WithoutRef`) is deliberate: the architecture
+ * spec requires every primitive to forward `ref`, and React 19 passes `ref` as an
+ * ordinary prop — so declaring it is the whole implementation.
  */
 export function Input({ className, ...props }: InputProps) {
   return (

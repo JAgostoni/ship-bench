@@ -2,6 +2,7 @@ import { FolderPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { CategorySummary } from '@/types/domain';
 import { NoCategoriesState } from '@/components/articles/empty-states';
+import { EditingAsChip } from './editing-as-chip';
 import { NewCategoryDialog } from './new-category-dialog';
 import { SidebarLink } from './sidebar-link';
 
@@ -9,6 +10,8 @@ export type SidebarProps = {
   categories: CategorySummary[];
   /** Published articles with `category_id IS NULL`; the row renders only when ≥ 1. */
   uncategorizedCount: number;
+  /** The `kb_display_name` cookie value, so the footer chip's first paint is right. */
+  displayName?: string | null;
 };
 
 /**
@@ -22,7 +25,7 @@ export type SidebarProps = {
  * are none (design-spec.md §4.4's Empty row), because §7.3 forbids a blank list
  * surface.
  */
-export function Sidebar({ categories, uncategorizedCount }: SidebarProps) {
+export function Sidebar({ categories, uncategorizedCount, displayName }: SidebarProps) {
   return (
     <div className="px-3 py-4">
       <p className="text-ink-subtle px-2 text-[11px] leading-[1.2] font-semibold tracking-[0.06em] uppercase">
@@ -60,6 +63,15 @@ export function Sidebar({ categories, uncategorizedCount }: SidebarProps) {
             </Button>
           }
         />
+      </div>
+
+      {/*
+        The `Editing as` chip sits at the bottom of the sidebar (design-spec.md §4.6's
+        placement). It is not authentication and the dialog says so — it exists so
+        History records a person rather than "Anonymous editor" for everyone.
+      */}
+      <div className="border-divider mt-3 border-t pt-2">
+        <EditingAsChip initialName={displayName} />
       </div>
     </div>
   );

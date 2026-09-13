@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Pencil } from 'lucide-react';
 import { ArticleBody } from '@/components/articles/article-body';
 import { ArticleHeader } from '@/components/articles/article-header';
+import { ArchiveArticleButton } from '@/components/articles/delete-article-button';
 import { BackToTop } from '@/components/articles/back-to-top';
 import { RevisionList } from '@/components/articles/revision-list';
 import { InlineTableOfContents, TableOfContents } from '@/components/articles/table-of-contents';
@@ -47,14 +48,33 @@ export default async function ArticlePage({ params }: DetailParams) {
       <div className="px-4 py-8 md:px-6">
         <div className="mx-auto flex max-w-3xl gap-10">
           <article className="min-w-0 flex-1">
-            <ArticleHeader article={article} />
+            {/*
+              `ArticleHeader`'s default action row is the Edit link plus an inert `⋯`
+              button. Supplying `actions` lets archive sit in a real overflow menu
+              (UX10: the destructive action must not compete with Edit for attention)
+              without hard-coding the menu inside a server component.
+            */}
+            <ArticleHeader
+              article={article}
+              actions={
+                <>
+                  <Button asChild variant="primary" size="md">
+                    <Link href={`/articles/${article.slug}/edit`}>
+                      <Pencil className="h-4 w-4" aria-hidden="true" />
+                      Edit
+                    </Link>
+                  </Button>
+                  <ArchiveArticleButton article={article} />
+                </>
+              }
+            />
 
             <div className="mt-6">
               <InlineTableOfContents headings={headings} />
               <ArticleBody markdown={article.bodyMd} />
             </div>
 
-            <RevisionList revisions={revisions} />
+            <RevisionList revisions={revisions} articleTitle={article.title} />
 
             <div className="mt-10">
               <Button asChild variant="secondary" size="md">

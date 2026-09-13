@@ -1,10 +1,8 @@
 import '@testing-library/jest-dom/vitest';
-import { vi } from 'vitest';
 
-// `server-only` throws unless resolved under the `react-server` condition,
-// which Vite does not set. The `server/**` boundary is enforced by the
-// production build and by ESLint, not by the test runner.
-vi.mock('server-only', () => ({}));
+// NOTE: `server-only` is aliased to an empty module in `vitest.config.ts`
+// (`architecture.md` §11.2). A `vi.mock` here cannot cover a deep import chain, because
+// the mock only applies once Vite has resolved the specifier at all.
 
 // jsdom implements neither PointerEvent nor the pointer-capture methods that
 // Radix's Select primitive calls when its trigger is clicked, so opening a

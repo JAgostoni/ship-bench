@@ -1,6 +1,14 @@
 import { NextResponse } from 'next/server';
+import { articleCreateSchema } from '@/lib/validation/article';
 import { listQuerySchema } from '@/lib/validation/query';
-import { problemResponse } from '@/server/http';
+import {
+  assertJsonContentType,
+  assertSameOrigin,
+  problemResponse,
+  readJsonBody,
+} from '@/server/http';
+import { readDisplayName } from '@/server/display-name';
+import { logger } from '@/server/logger';
 import { articleRepository } from '@/server/repositories/articles';
 import { searchRepository } from '@/server/repositories/search';
 import { toArticleWire } from '@/server/serialize';
@@ -46,6 +54,73 @@ export async function GET(request: Request): Promise<NextResponse> {
 }
 
 type ParsedQuery = ReturnType<typeof listQuerySchema.parse>;
+
+/**
+ * `POST /api/articles` — create (`architecture.md` §7.3).
+ * Three guards run before anything is written, all of them required by §7.3/§13.2 and
+ * none of them inherited from Next.js, because this is a plain route handler rather
+ * than a Server Action: same-origin, JSON content type, and the shared Zod schema.
+ *
+ * `201 Created` carries `Location: /api/articles/{id}` and the documented
+ * `{ id, slug, version, status, createdAt }` body. `422` carries the RFC 9457 problem
+ * document whose `errors` array is `[{ path, message }]`, produced by
+ * `problemResponse`'s `ZodError` branch — the same shape the read endpoints already
+ * return, so a client has one error contract.
+ */
+export async function POST(request: Request): Promise<NextResponse> {
+  const denied = assertSameOrigin(request);
+  if (denied) return denied;
+
+  const unsupported = assertJsonContentType(request);
+  if (unsupported) return unsupported;
+
+  try {
+    const parsedBody = await readJsonBody(request);
+    if (!parsedBody.ok) return parsedBody.response;
+
+    const input = articleCreateSchema.parse(parsedBody.body);
+    const editorName = await readDisplayName();
+    const startedAt = Date.now();
+    const result = articleRepository.createArticle({ ...input, editorName });
+
+    if (!result.ok) {
+      // A `CONFLICT` here is a slug collision, and it maps to the documented `409`
+      // problem for that code (`src/lib/errors.ts`).
+      return problemResponse(result.error, request);
+    }
+
+    const { id, slug, version } = result.value;
+    logger.info(
+      {
+        event: 'api.article.create',
+        articleId: id,
+        slug,
+        version,
+        durationMs: Date.now() - startedAt,
+      },
+      'api.article.create',
+    );
+
+    return NextResponse.json(
+      {
+        id,
+        slug,
+        version,
+        status: input.status ?? 'draft',
+        createdAt: result.value.updatedAt.toISOString(),
+      },
+      {
+        status: 201,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          Location: `/api/articles/${id}`,
+        },
+      },
+    );
+  } catch (error) {
+    return problemResponse(error, request);
+  }
+}
 
 /**
  * Two modes, one envelope. In search mode the ranked ids are hydrated in a single

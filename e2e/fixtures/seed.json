@@ -1,0 +1,108 @@
+{
+  "generatedFrom": "src/server/db/seed.ts",
+  "categories": [
+    {
+      "name": "Engineering",
+      "slug": "engineering",
+      "description": "Architecture, tooling, and how we build and ship software."
+    },
+    {
+      "name": "Product",
+      "slug": "product",
+      "description": "Roadmaps, discovery notes, and product decisions."
+    },
+    {
+      "name": "People",
+      "slug": "people",
+      "description": "Onboarding, team practices, and working agreements."
+    },
+    {
+      "name": "Operations",
+      "slug": "operations",
+      "description": "Runbooks, incident response, and day-to-day service operations."
+    }
+  ],
+  "articles": [
+    {
+      "title": "Deploying the API to Production",
+      "slug": "deploying-the-api-to-production",
+      "summary": "The end-to-end production release checklist, including the deploy command, rollback steps, and verification gates.",
+      "bodyMd": "## Overview\n\nThis runbook covers a standard production deploy of the API service. A deploy\ntakes roughly six minutes end to end when CI is green.\n\n## Prerequisites\n\n- A clean working tree on `main`.\n- The release branch has passed CI (typecheck, lint, tests, build).\n- The on-call engineer has acknowledged the change window in `#releases`.\n\n## The deploy command\n\n```bash\n# Build the release artifact, then roll it out to the primary region.\nnpm run build\nfly deploy --strategy rolling --wait-timeout 300\n```\n\nIf the deploy stalls, check the health endpoint before retrying. Do **not** run\nthe deploy command twice in a row.\n\n## Environment matrix\n\n| Environment | Region | Database            | Auto-deploy |\n| ----------- | ------ | ------------------- | ----------- |\n| Development | local  | SQLite (file)       | n/a         |\n| Staging     | us-east-1 | Postgres 16      | On merge    |\n| Production  | us-east-1 | Postgres 16      | Manual      |\n\n## Release checklist\n\n- [ ] Confirm CI is green on the release commit\n- [ ] Announce the change window in `#releases`\n- [ ] Run the deploy command\n- [ ] Verify `/api/health` returns `ok`\n- [ ] Watch error rates for ten minutes\n- [ ] Post the release summary\n\n## Rolling back\n\nA rollback re-deploys the previous artifact. The database migrations are\nforward-only, so confirm the schema change is backward compatible before\nrolling back.\n\n```bash\nfly releases list\nfly deploy --image <previous-image>\n```\n\n## Notes\n\nDeploying on Friday afternoon is allowed but discouraged. If you deploy late,\nstay available until the error rate returns to baseline.",
+      "status": "published",
+      "categorySlug": "engineering",
+      "revisions": 3
+    },
+    {
+      "title": "Incident Response Runbook",
+      "slug": "incident-response-runbook",
+      "summary": "How we detect, triage, communicate about, and learn from production incidents.",
+      "bodyMd": "## Severity levels\n\nWe classify incidents by user impact, not by how exotic the cause is.\n\n| Severity | Definition                          | Response time |\n| -------- | ----------------------------------- | ------------- |\n| SEV-1    | Total outage or data loss           | 5 minutes     |\n| SEV-2    | Major feature unavailable           | 30 minutes    |\n| SEV-3    | Degraded performance or minor bug   | Next business day |\n\n## Roles\n\nEvery incident has exactly one **incident commander**. The commander does not\ndebug; they coordinate, communicate, and decide.\n\n## First five minutes\n\n- [ ] Declare the incident in `#incidents`\n- [ ] Assign an incident commander\n- [ ] Start a shared notes document\n- [ ] Post an initial status update\n\n## Communication cadence\n\nFor a SEV-1, post a status update every fifteen minutes even when there is\nnothing new. Silence is worse than an unhelpful update.\n\n## After the incident\n\nThe commander writes a blameless postmortem within three business days. The\npostmortem lists contributing factors, not a single root cause, and produces\naction items with owners and dates.\n\nIf the incident began with a deploy, freeze further deploys until the incident\nis fully resolved and the postmortem action items are filed.\n\n## Notes\n\nOur current staging environment mirrors the production database schema but not\nits data volume, so capacity problems frequently surface first in production.",
+      "status": "published",
+      "categorySlug": "operations",
+      "revisions": 1
+    },
+    {
+      "title": "Setting Up Your Local Environment",
+      "slug": "setting-up-your-local-environment",
+      "summary": null,
+      "bodyMd": "## Install the toolchain\n\nWe use Node.js 24 LTS. Version managers vary by platform; `.nvmrc` pins the\nexact version the project targets.\n\n```bash\nnvm use\nnpm install\ncp .env.example .env.local\n```\n\n## Prepare the database\n\nThe application ships with a seed script so a fresh clone is immediately\nusable.\n\n```bash\nnpm run db:setup\nnpm run dev\n```\n\n## Daily commands\n\n| Goal                | Command            |\n| ------------------- | ------------------ |\n| Start the dev server | `npm run dev`     |\n| Run all checks       | `npm run verify`  |\n| Reset local data     | `npm run db:reset` |\n\n## Before your first pull request\n\n- [ ] `npm run verify` passes locally\n- [ ] Any new environment variable is added to `.env.example`\n- [ ] Any schema change includes a generated migration\n\n## Notes\n\nWhen you ship a change that touches the schema, remember that the search index\nis rebuilt separately from the relational tables.\n\nThe first time you deploy a change, ask your onboarding buddy to walk through\nthe production runbook with you before you start.",
+      "status": "published",
+      "categorySlug": "engineering",
+      "revisions": 1
+    },
+    {
+      "title": "Product Roadmap: Q4",
+      "slug": "product-roadmap-q4",
+      "summary": "The commitments, the deliberately deferred work, and the reasoning behind both.",
+      "bodyMd": "## Themes\n\nQ4 has three themes: **reliability**, **search quality**, and **editorial\nworkflow**.\n\n## Committed work\n\n| Theme          | Deliverable                        | Owner    |\n| -------------- | ---------------------------------- | -------- |\n| Reliability    | Automated index consistency checks | Platform |\n| Search quality | Ranked results with snippets       | Platform |\n| Workflow       | Markdown editor with live preview  | Product  |\n\n## Explicitly deferred\n\n- Tags and nested categories. The data model supports them but the interface\n  does not need them yet.\n- Revision diffing. History stays view-only this quarter.\n\n## How we will know it worked\n\nSearch is the only feature with a measurable target: internal users should find\na known article in under ten seconds without using the sidebar.\n\n## Notes\n\nWe are deliberately not building a mobile-native client this quarter.",
+      "status": "published",
+      "categorySlug": "product",
+      "revisions": 1
+    },
+    {
+      "title": "Writing Effective Design Docs",
+      "slug": "writing-effective-design-docs",
+      "summary": "A short template and the review habits that make design docs worth reading.",
+      "bodyMd": "## Why we write them\n\nA design doc is a decision record, not a tutorial. Write it so a reader six\nmonths from now can understand *why* the system works the way it does.\n\n## Template\n\n1. **Context** — what problem exists today.\n2. **Goals and non-goals** — the boundary of the change.\n3. **Proposal** — the design, with a diagram.\n4. **Alternatives considered** — what you rejected and why.\n5. **Open questions** — what you are still unsure about.\n\n## Review habits\n\n- Reviewers read the doc before the meeting.\n- Disagreement is recorded in the doc, not only in the thread.\n- The author, not the reviewer, decides when the doc is ready.\n\n## Common failure modes\n\n| Failure              | Fix                                     |\n| -------------------- | --------------------------------------- |\n| Buried the lede      | Put the proposal in the first paragraph |\n| No alternatives      | List at least two rejected options      |\n| Undefined terms      | Define them at first use                |\n\n## Notes\n\nA design doc that is never revisited is a sign the alternatives section was\ntoo thin to matter.",
+      "status": "published",
+      "categorySlug": "product",
+      "revisions": 1
+    },
+    {
+      "title": "Onboarding Checklist for New Engineers",
+      "slug": "onboarding-checklist-for-new-engineers",
+      "summary": "The first-week plan, the first-month goals, and who to ask for what.",
+      "bodyMd": "## Day one\n\n- [ ] Collect your laptop and accounts\n- [ ] Join the team channels\n- [ ] Pair with your onboarding buddy for the afternoon\n\n## Week one\n\nYour goal is to ship one small change to production. It does not matter how\nsmall; the point is to exercise the whole path from branch to release.\n\n- [ ] Set up the local environment\n- [ ] Read the architecture document\n- [ ] Ship one small change\n- [ ] Review someone else's pull request\n\n## Month one\n\n- [ ] Own a small feature end to end\n- [ ] Join the on-call rotation as an observer\n- [ ] Write one design doc\n\n## Who to ask\n\n| Question                     | Ask                      |\n| ---------------------------- | ------------------------ |\n| Access and accounts          | Onboarding buddy         |\n| Architecture and design      | Any engineer on the team |\n| Roadmap and priorities       | Your manager             |\n\n## Notes\n\nThe first change should be intentionally trivial. A typo fix still proves you\ncan build, test, and merge.",
+      "status": "published",
+      "categorySlug": "people",
+      "revisions": 1
+    },
+    {
+      "title": "Code Review Guidelines",
+      "slug": "code-review-guidelines",
+      "summary": null,
+      "bodyMd": "## What reviewers look for\n\nReview for correctness first, then clarity, then style. Style disagreements are\nresolved by the formatter, not by the review thread.\n\n## Author expectations\n\n- Keep pull requests under roughly 400 changed lines.\n- Describe the *why* in the description; the *what* is visible in the diff.\n- Respond to every comment, even if only to say \"fixed\" or \"disagree, because…\".\n\n## Reviewing\n\n| Signal                    | Response                                  |\n| ------------------------- | ----------------------------------------- |\n| Missing test              | Request one, or offer to add it           |\n| Unclear name              | Suggest a better one, do not demand it    |\n| Structural concern        | Raise it before the line-by-line comments |\n\n## Turnaround\n\nWe aim to leave a first review within one business day. If you cannot, say so\nin the thread so the author can find another reviewer.\n\n## Notes\n\nApproval is not a guarantee of correctness. It means the change is a reasonable\nimprovement and you are willing to be accountable for it.",
+      "status": "published",
+      "categorySlug": null,
+      "revisions": 1
+    },
+    {
+      "title": "Draft: Q1 Planning Notes",
+      "slug": "draft-q1-planning-notes",
+      "summary": "Working notes for the Q1 planning session. Not yet reviewed.",
+      "bodyMd": "## Scratch notes\n\nThese are unedited notes from the planning session. They are a draft and should\nnot be circulated outside the team until reviewed.\n\n## Candidate themes\n\n- Search relevance and snippet quality\n- Editorial workflow improvements\n- Reducing time-to-first-contribution for new engineers\n\n## Questions to resolve\n\n- How much of the quarter goes to reliability work?\n- Do we revisit the taxonomy question, or defer it again?\n- What is the measurable outcome for the search work?",
+      "status": "draft",
+      "categorySlug": "product",
+      "revisions": 1
+    },
+    {
+      "title": "Draft: Migrating to Postgres",
+      "slug": "draft-migrating-to-postgres",
+      "summary": "An early sketch of a future database migration. Placeholder only.",
+      "bodyMd": "## Status\n\nDraft. This is a placeholder for a migration we have not scheduled.\n\n## Why consider it\n\nThe current embedded database is a single file, which caps us at a single\napplication instance. When we need more than one instance, the storage layer\nbecomes the constraint.\n\n## Sketch\n\n- Move the schema to a server-backed database.\n- Replace the full-text search table with a native inverted index.\n- Keep the repository boundary intact so the change stays contained.\n\n## Open questions\n\n- What is the acceptable amount of downtime?\n- Do we need a dual-write period, or is a maintenance window enough?\n- Who owns the migration?",
+      "status": "draft",
+      "categorySlug": "engineering",
+      "revisions": 1
+    }
+  ]
+}
